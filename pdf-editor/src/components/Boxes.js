@@ -1,6 +1,9 @@
 import { Rect } from 'react-konva';
 
 let rendexBox = (box) => {
+
+    
+
     return (<Rect
         x={box.x}
         y={box.y}

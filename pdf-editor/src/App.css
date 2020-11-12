@@ -36,3 +36,89 @@
     transform: rotate(360deg);
   }
 }
+/***/
+.App {
+  text-align: center;
+}
+
+
+
+@media (prefers-reduced-motion: no-preference) {
+  
+  
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/*==============*/
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.top-bar {
+  background: #333;
+  color: #fff;
+  padding: 1rem;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+  /*z-index: 3;*/
+}
+
+.btn {
+  background: coral;
+  color: #fff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0.7rem 2rem;
+  margin:5px;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.page-info {
+  margin-top: 10px;
+  margin-left: 50px;
+     
+}
+
+.error {
+  background: orangered;
+  color: #fff;
+  padding: 1rem;
+}
+.pdf-render{
+    
+  margin-left: 160px;
+  padding: 16px;
+  margin-top: 50px;
+  overflow: hidden;
+  padding: 1rem;
+        
+}
+
