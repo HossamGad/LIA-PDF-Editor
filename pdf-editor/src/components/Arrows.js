@@ -1,6 +1,9 @@
 import { Arrow } from 'react-konva';
 
 let rendexArrow = (arrow) => {
+
+    console.log(arrow);
+
     return (<Arrow
         x={arrow.x}
         y={arrow.y}

@@ -4,10 +4,14 @@ import './App.css';
 import { Boxes } from './components/Boxes';
 import { Arrows } from './components/Arrows';
 import { Texts } from './components/Texts';
+//import { TopBar } from './components/TopBar';
+//import { texts } from './components/TopBar';
+//import { arrows } from './components/TopBar';
+//import { boxes } from './components/TopBar';
+
 
 let boxes = [
- 
-  
+
 ];
 
 let arrows = [
@@ -18,7 +22,9 @@ let texts = [
  
 ];
 
+
 class App extends Component {
+  
   state = {
     boxes: boxes,
     arrows: arrows,
@@ -53,26 +59,38 @@ class App extends Component {
   }
 
   render() {
-  return (
-    <>
-    {/* <canvas class="pdf-render" id="pdf-render"></canvas> */}
-    <div className="App" style={{position: 'absolute', overflow: 'hidden', top :55, left: 10, zIndex: 2}}>
+    return (
+      <>
+      {/* <canvas class="pdf-render" id="pdf-render"></canvas> */}
+      <div className="App" style={{position: 'absolute', overflow: 'hidden', top :55, left: 0, zIndex: 2}}>
+        <div className="top-bar">
+            <button className="btn" id="prev-page" style={{float:"left"}}>
+            <i className="fas fa-arrow-circle-left"></i> Prev Page
+            </button>
+            <button className="btn" id="next-page" style={{float:"left"}}>
+            Next Page <i className="fas fa-arrow-circle-right"></i>
+            </button>
+            <span className="page-info" style={{float:"left"}}>
+            Page <span id="page-num"></span> of <span id="page-count"></span>
+            </span>
+            <button className="btn" style={{float:"right", marginRight:40}} onClick={() => this.addBox()}><i className="far fa-square"></i></button>
+            <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addArrow()}><i className="fas fa-location-arrow"></i></button>
+            <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addText()}><i className="fas fas fa-font"></i></button>
+        </div>
 
-    <button style={{position: 'relative', top: 30, zIndex: 2}} onClick={() => this.addBox()}>Add box</button>
-    <button style={{position: 'relative', top: 50, zIndex: 2}} onClick={() => this.addArrow()}>Add arrow</button>
-    <button style={{position: 'relative', top: 70, zIndex: 2}} onClick={() => this.addText()}>Add text</button>
-
-      <Stage id="id-stage" width={1224} height={771}>
-        <Layer>
-          <Boxes boxes={boxes} />
-          <Arrows arrows={arrows} />
-          <Texts texts={texts}/>
-        </Layer>
-     </Stage>
-    </div>
-    </>
-  );
-}
+        <Stage id="id-stage" width={1224} height={1200}>
+          <Layer>
+            
+            <Boxes boxes={boxes} />
+            <Arrows arrows={arrows} />
+            <Texts texts={texts}/> 
+          
+          </Layer>
+        </Stage>
+      </div>
+      </>
+    );
+  }
 }
 
 export default App;

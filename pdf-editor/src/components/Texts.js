@@ -6,8 +6,8 @@ let rendexText = (text) => {
         x: 10,
         y: 210, 
     }*/
+    //console.log(text);
     
-
     return (
        <Text
         text="Drag this text!"
