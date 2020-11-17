@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import * as pdfWorker from 'pdfjs-dist/build/pdf.worker.entry';
 import * as PdfJsLib from 'pdfjs-dist/build/pdf';

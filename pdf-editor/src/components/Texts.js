@@ -1,40 +1,25 @@
 import { Text } from 'react-konva';
 
 let rendexText = (text) => {
-    /*state = {
-        isDragging: false,
-        x: 10,
-        y: 210, 
-    }*/
-    //console.log(text);
-    
+
     return (
        <Text
-        text="Drag this text!"
-        fontSize={30}
-        fontFamily='Calibri'
-        x={text.x}
-        y={text.y}
-        draggable
-        /*
-        fill={this.state.isDragging ? 'green' : 'red'}
-        onDragStart = { () => {
-            this.setState({
-                isDragging: true
-            })
-        }}
-        onDragEnd  = { e => {
-            this.setState({
-                isDragging: false,
-                x: e.target.x(),
-                y: e.target.y()
-            })
-        }}*/
-    />
+            text= 'Drag this text'
+            fontSize={30}
+            fontFamily='Calibri'
+            x={text.x}
+            y={text.y}
+            draggable
+
+            onClick={() => { 
+                alert('text clicked');
+            }}
+        />
     );
 }
 
 export function Texts(props) {
+
     return (
         <>
             {props.texts.map(c => rendexText(c))}
