@@ -1,7 +1,7 @@
 import React from 'react';
-import { Arrow, Transformer } from 'react-konva';
+import { Text, Transformer } from 'react-konva';
 
-export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
+export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
 
@@ -15,7 +15,7 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
   return (
     <React.Fragment>
-      <Arrow
+      <Text
         onClick={onSelect}
         onTap={onSelect}
         ref={shapeRef}
@@ -59,10 +59,9 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
               return oldBox;
             }
             return newBox;
-          }}
+          }}  
         />
       )}
     </React.Fragment>
   );
 };
-
