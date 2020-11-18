@@ -5,6 +5,8 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
 
+  const [visible, setVisible] = React.useState(true);
+
   React.useEffect(() => {
     if (isSelected) {
       // we need to attach transformer manually
@@ -18,6 +20,46 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
       <Text
         onClick={onSelect}
         onTap={onSelect}
+        onDblClick={() => {
+          
+          const textNode = shapeRef.current;
+          const tr = trRef.current;
+          
+          setVisible(false);
+
+          if(visible === false) {
+            textNode.hide();
+            tr.hide();
+          }
+
+          let textPosition = textNode.absolutePosition();
+
+          console.log(textPosition);
+
+          let topBar = document.getElementById('tbar');
+          let textArea = document.createElement('textarea');
+
+          textArea.setAttribute('id', 'txt-area');
+          textArea.value = textNode.text();
+          textArea.addEventListener('keydown', function(e) {
+            if(e.keyCode === 13) {
+
+              setVisible(true);
+
+              if(visible === true)
+              {
+                textNode.text(textArea.value);
+                textArea.parentNode.removeChild(textArea);
+
+                textNode.show();
+                tr.show();
+              }
+            }
+          })
+
+          topBar.appendChild(textArea);
+
+        }}
         ref={shapeRef}
         {...shapeProps}
         draggable
