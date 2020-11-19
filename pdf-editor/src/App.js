@@ -6,7 +6,6 @@ import { Rectangle } from './components/Rectangle';
 import { Arrows } from './components/Arrows';
 import { TextEdit } from './components/TextEdit';
 
-
 let idnum = 0;
 let idnum2 = 0;
 let idnum3 = 0;
@@ -126,7 +125,7 @@ class App extends Component {
       <>
       <canvas ref={this.canvasRef} id="pdf-render"></canvas>
       <div className="App" style={{position: 'absolute', overflow: 'hidden', top :55, left: 0, zIndex: 2}}>
-        <div className="top-bar" style={{zIndex: 3}}>
+        <div id="tbar" className="top-bar" style={{zIndex: 3}}>
             <PDFViewer />
             <button className="btn" style={{float:"right", marginRight:40}} onClick={() => this.addRectangle()}><i className="far fa-square"></i></button>
             <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addArrow()}><i className="fas fa-location-arrow"></i></button>
@@ -208,8 +207,7 @@ class App extends Component {
 
           </Layer>
         </Stage>
-
-        </div>     
+        </div>    
       </>
     );
   }
