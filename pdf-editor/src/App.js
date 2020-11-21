@@ -5,6 +5,7 @@ import { PDFViewer } from './components/PDFViewer';
 import { Rectangle } from './components/Rectangle';
 import { Arrows } from './components/Arrows';
 import { TextEdit } from './components/TextEdit';
+import { TestArrow } from './components/TestArrow';
 
 let idnum = 0;
 let idnum2 = 0;
@@ -68,7 +69,7 @@ class App extends Component {
         arrows.push({
         x: 90,
         y: 90,
-        points: [0, 0, 100, 100],
+        points: [0, 0, 200, 0],
         pointerLength: 20,
         pointerWidth: 20,
         fill: 'Red',
@@ -124,7 +125,10 @@ class App extends Component {
     return (
       <>
       <canvas ref={this.canvasRef} id="pdf-render"></canvas>
-      <div className="App" style={{position: 'absolute', overflow: 'hidden', top :55, left: 0, zIndex: 2}}>
+      <div id="test-div" style={{position: 'absolute', top: 200, left: 200, zIndex: 4}}>
+
+      </div>
+      <div id="id-app" className="App" style={{position: 'absolute', overflow: 'hidden', top :55, left: 0, zIndex: 2}}>
         <div id="tbar" className="top-bar" style={{zIndex: 3}}>
             <PDFViewer />
             <button className="btn" style={{float:"right", marginRight:40}} onClick={() => this.addRectangle()}><i className="far fa-square"></i></button>
@@ -199,12 +203,13 @@ class App extends Component {
                     texts[i] = newAttrs;
                     this.setState({
                       texts: texts
-                    })
+                    })                   
                   }}
                 />
               );
             })}
 
+          <TestArrow />
           </Layer>
         </Stage>
         </div>    

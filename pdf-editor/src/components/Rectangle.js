@@ -5,13 +5,29 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
 
+  const [deleted, setDeleted] = React.useState(false);
+
   React.useEffect(() => {
     if (isSelected) {
       // we need to attach transformer manually
       trRef.current.nodes([shapeRef.current]);
       trRef.current.getLayer().batchDraw();
+      document.addEventListener("keydown", function(event) {
+        if (event.key === 'Delete') {
+          setDeleted(true);
+
+          setDeleted(false);
+            if(deleted === false) {
+              const textNode = shapeRef.current;
+              //const tr = trRef.current;
+              
+              textNode.destroy();
+              //tr.destroy();
+            }
+        }
+      });
     }
-  }, [isSelected]);
+  }, [deleted, isSelected]);
 
   return (
     <React.Fragment>

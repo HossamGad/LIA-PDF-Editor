@@ -6,40 +6,54 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
   const trRef = React.useRef();
 
   const [visible, setVisible] = React.useState(true);
+  const [deleted, setDeleted] = React.useState(false);
 
   React.useEffect(() => {
     if (isSelected) {
       // we need to attach transformer manually
       trRef.current.nodes([shapeRef.current]);
       trRef.current.getLayer().batchDraw();
+      document.addEventListener("keydown", function(event) {
+        if (event.key === 'Delete') {
+          setDeleted(true);
+
+          setDeleted(false);
+            if(deleted === false) {
+              const textNode = shapeRef.current;
+              //const tr = trRef.current;
+              
+              textNode.destroy();
+              //tr.destroy();
+            }
+        }
+      });
     }
-  }, [isSelected]);
+  }, [deleted, isSelected]);
 
   return (
     <React.Fragment>
       <Text
         onClick={onSelect}
         onTap={onSelect}
-        onDblClick={() => {
+        onDblClick={(e) => {
           
           const textNode = shapeRef.current;
           const tr = trRef.current;
           
           setVisible(false);
+          setDeleted(true);
 
-          if(visible === false) {
-            textNode.hide();
-            tr.hide();
-          }
+          
+          textNode.hide();
+          tr.hide();
+          
 
-          let textPosition = textNode.absolutePosition();
-
-          console.log(textPosition);
-
-          let topBar = document.getElementById('tbar');
+          let topBar = document.getElementById('test-div');
           let textArea = document.createElement('textarea');
+          topBar.appendChild(textArea);
 
           textArea.setAttribute('id', 'txt-area');
+          
           textArea.value = textNode.text();
           textArea.addEventListener('keydown', function(e) {
             if(e.keyCode === 13) {
@@ -53,12 +67,9 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
                 textNode.show();
                 tr.show();
-              }
+              } 
             }
           })
-
-          topBar.appendChild(textArea);
-
         }}
         ref={shapeRef}
         {...shapeProps}
@@ -95,6 +106,7 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
       {isSelected && (
         <Transformer
           ref={trRef}
+          onClick={() => {alert('test')}}
           boundBoxFunc={(oldBox, newBox) => {
             // limit resize
             if (newBox.width < 5 || newBox.height < 5) {
