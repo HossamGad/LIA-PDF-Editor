@@ -33,30 +33,11 @@ export const TestArrow = ({ shapeProps, isSelected, onSelect, onChange }) => {
         circle2Ref.current.attrs.x = x2;
         circle2Ref.current.attrs.y = y2;
     }, [x1, y1, x2, y2]);
-      
-    /*
-    function updateLine() {
-        const points = [
-          anchor1.x(),
-          anchor1.y(),
-          anchor2.x(),
-          anchor2.y(),
-        ]
-        line.points(points);
-        layer.batchDraw();
-      }
-      
-      anchor1.on('dragmove', updateLine);
-      anchor2.on('dragmove', updateLine);
-      
-      layer.draw();
-      */
     
     return (
         <React.Fragment>
             <Arrow
                 ref={arrowRef}
-                //onDragMove={updateLine}
                 x= {ax1}
                 y= {ay1}
                 points = {[0, 0, ax2, ay2]}
