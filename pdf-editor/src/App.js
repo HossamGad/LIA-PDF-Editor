@@ -10,12 +10,17 @@ import { TestArrow } from './components/TestArrow';
 let idnum = 0;
 let idnum2 = 0;
 let idnum3 = 0;
+let idnum4 = 0;
 
 const initialRectangles = [
   
 ];
 
 const initialArrows = [
+  
+];
+
+const initialArrows2 = [
   
 ];
 
@@ -36,6 +41,9 @@ class App extends Component {
 
       texts: initialTexts,
       selectedId3: null,
+
+      arrows2: initialArrows2,
+      selectedId4: null,
 
     }
     this.canvasRef = React.createRef();
@@ -82,6 +90,20 @@ class App extends Component {
     });
   }
 
+  addArrow2() {
+
+    idnum4++;
+
+    let arrows2 = this.state.arrows2;
+        arrows2.push({
+        
+        id: '2arrow' + idnum4
+    });
+    this.setState({
+      arrows2: arrows2
+    });
+  }
+
   addText() {
 
     idnum3++;
@@ -116,7 +138,8 @@ class App extends Component {
         this.setState({
           selectedId: null,
           selectedId2: null,
-          selectedId3: null
+          selectedId3: null,
+          selectedId4: null
         });
     }
   };
@@ -133,6 +156,7 @@ class App extends Component {
             <PDFViewer />
             <button className="btn" style={{float:"right", marginRight:40}} onClick={() => this.addRectangle()}><i className="far fa-square"></i></button>
             <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addArrow()}><i className="fas fa-location-arrow"></i></button>
+            <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addArrow2()}><i className="fas fa-location-arrow"></i></button>
             <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addText()}><i className="fas fas fa-font"></i></button>
             <input id="text-area" placeholder=" Write text here..."style={{float:"right", marginRight:5, margin:5, height: 35, fontSize: 20}} />
         </div>
@@ -209,7 +233,28 @@ class App extends Component {
               );
             })}
 
-          <TestArrow />
+          {this.state.arrows2.map((arrow2, i) => {
+            return(
+              <TestArrow 
+                key={i}
+                shapeProps={arrow2}
+                isSelected={arrow2.id === this.state.selectedId4}
+                onSelect={() => {
+                  this.setState({
+                    selectedId4: arrow2.id
+                  })
+                }}
+                onChange={(newAttrs) => {
+                  const arrows2 = this.state.arrows2.slice();
+                  arrows2[i] = newAttrs;
+                  this.setState({
+                    arrows2: arrows2
+                  })                   
+                }}
+              />
+            );
+          })}
+          
           </Layer>
         </Stage>
         </div>    
