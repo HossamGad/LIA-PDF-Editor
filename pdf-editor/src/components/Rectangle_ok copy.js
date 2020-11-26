@@ -1,13 +1,68 @@
 import React from 'react';
-import { Arrow, Transformer } from 'react-konva';
+import { Rect, Transformer } from 'react-konva';
 
-export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
+export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
+  
+  //const [rectangel, setRectangel] = React.useState(localStorage.getItem('rect1'));
+  //const [pgData, setpgData] = React.useState(0);
+  //const [pageNum, setPageNum] = React.useState(0);
 
   const [deleted, setDeleted] = React.useState(false);
+  
+  const [rx1, setRx1] = React.useState(300);
+  const [ry1, setRy1] = React.useState(300);
+
+  const [w1, setW1] = React.useState(200);
+  const [h1, setH1] = React.useState(30);
+
+  //const [rx12, setRx12] = React.useState(300);
+  //const [ry12, setRy12] = React.useState(300);
+
+  //const [w12, setW12] = React.useState(200);
+  //const [h12, setH12] = React.useState(30);
 
   React.useEffect(() => {
+
+    setRx1(shapeRef.current.attrs.x);
+    setRy1(shapeRef.current.attrs.y);
+    setW1(shapeRef.current.attrs.width);
+    setH1(shapeRef.current.attrs.height);
+
+    let pageNumSpan = document.getElementById('page-num');
+
+    let localStorageRectangle = [{
+      page: pageNumSpan.innerText,
+      id: shapeProps.id,
+      x: rx1,
+      y: ry1,
+      w: w1,
+      h: h1
+    }];
+
+    const json = JSON.stringify(localStorageRectangle);
+    localStorage.setItem(shapeProps.id, json);
+
+  }, [setRx1, setRy1, setW1, setH1, rx1, ry1, w1, h1, shapeProps]);
+
+  /*
+  React.useEffect(() => {
+
+    
+    for (var i = 0; i < localStorage.length; i++){
+      let item = localStorage.getItem(localStorage.key(i));
+      let parsedItem = JSON.parse(item);
+      
+        setRx12(parsedItem[i].x);
+        setRy12(parsedItem[i].y);
+        setW12(parsedItem[i].w);
+        setH12(parsedItem[i].h);
+    }
+  }, [setRx1, setRy1, setW1, setH1]);
+  */
+  React.useEffect(() => {
+
     if (isSelected) {
       // we need to attach transformer manually
       trRef.current.nodes([shapeRef.current]);
@@ -31,7 +86,13 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
   return (
     <React.Fragment>
-      <Arrow
+      <Rect
+        x= {rx1}
+        y= {ry1}
+        width= {w1}
+        height= {h1}
+        fill= 'yellow'
+        opacity = {0.5}
         onClick={onSelect}
         onTap={onSelect}
         ref={shapeRef}
@@ -69,7 +130,6 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
       {isSelected && (
         <Transformer
           ref={trRef}
-          enabledAnchors= {['middle-left', 'middle-right']}
           boundBoxFunc={(oldBox, newBox) => {
             // limit resize
             if (newBox.width < 5 || newBox.height < 5) {
