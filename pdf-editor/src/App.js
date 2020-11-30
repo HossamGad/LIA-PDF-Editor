@@ -3,20 +3,16 @@ import {Stage, Layer} from 'react-konva';
 import './App.css';
 import { PDFViewer } from './components/PDFViewer';
 import { Rectangle } from './components/Rectangle';
-import { Arrows } from './components/Arrows';
 import { TextEdit } from './components/TextEdit';
-import { TestArrow } from './components/TestArrow';
+import { Arrows } from './components/Arrows';
+//import LocalStorage from './components/LocalStorage';
+//import { TestLocalStorage } from './components/TestLocalStorage';
 
 let idnum = 0;
-let idnum2 = 0;
 let idnum3 = 0;
 let idnum4 = 0;
 
 const initialRectangles = [
-  
-];
-
-const initialArrows = [
   
 ];
 
@@ -29,21 +25,21 @@ const initialTexts = [
 ];
 
 class App extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       
-      rectangles: initialRectangles,
+      rectangles: initialRectangles, //props.items
       selectedId: null,
-
-      arrows: initialArrows,
-      selectedId2: null,
 
       texts: initialTexts,
       selectedId3: null,
 
       arrows2: initialArrows2,
       selectedId4: null,
+
+      pageDataFromChild: 0,
+      // items: props.items
 
     }
     this.canvasRef = React.createRef();
@@ -56,37 +52,12 @@ class App extends Component {
 
     let rectangles = this.state.rectangles;
     rectangles.push({
-      x: 50,
-      y: 50,
-      width: 200,
-      height: 30,
-      fill: 'yellow',
+    
       id: 'rect' + idnum,
-      opacity: 0.5
+      
     });
     this.setState({
       rectangles: rectangles
-    });
-  }
-
-  addArrow() {
-
-    idnum2++;
-
-    let arrows = this.state.arrows;
-        arrows.push({
-        x: 90,
-        y: 90,
-        points: [0, 0, 200, 0],
-        pointerLength: 20,
-        pointerWidth: 20,
-        fill: 'Red',
-        stroke: 'Red',
-        strokeWidth: 5,
-        id: 'arrow' + idnum2
-    });
-    this.setState({
-      arrows: arrows
     });
   }
 
@@ -131,6 +102,14 @@ class App extends Component {
     });
   }
 
+  callbackPage = (pageData) => {
+    let data = pageData;
+    this.setState({
+      pageDataFromChild: data
+    });
+    console.log(data);
+  }
+
   checkDeselect(e) {
     // deselect when clicked on empty area
     const clickedOnEmpty = e.target === e.target.getStage();
@@ -145,6 +124,8 @@ class App extends Component {
   };
 
   render() {
+
+    // console.log(this.state.items);
     return (
       <>
       <canvas ref={this.canvasRef} id="pdf-render"></canvas>
@@ -153,12 +134,12 @@ class App extends Component {
       </div>
       <div id="id-app" className="App" style={{position: 'absolute', overflow: 'hidden', top :55, left: 0, zIndex: 2}}>
         <div id="tbar" className="top-bar" style={{zIndex: 3}}>
-            <PDFViewer />
-            <button className="btn" style={{float:"right", marginRight:40}} onClick={() => this.addRectangle()}><i className="far fa-square"></i></button>
-            <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addArrow()}><i className="fas fa-location-arrow"></i></button>
+            <PDFViewer cPage={this.callbackPage} />
+            <button id="idrect" className="btn" style={{float:"right", marginRight:40}} onClick={() => this.addRectangle()}><i className="far fa-square"></i></button>
             <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addArrow2()}><i className="fas fa-location-arrow"></i></button>
             <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addText()}><i className="fas fas fa-font"></i></button>
             <input id="text-area" placeholder=" Write text here..."style={{float:"right", marginRight:5, margin:5, height: 35, fontSize: 20}} />
+            {/*<LocalStorage pgData={this.state.pageDataFromChild} />*/}
         </div>
 
         <Stage id="id-stage" width={1224} height={1200}
@@ -185,28 +166,7 @@ class App extends Component {
                       rectangles: rects
                     })
                   }}
-                />
-              );
-            })}
-
-            {this.state.arrows.map((arrow, i) => {
-              return (
-                <Arrows
-                  key={i}
-                  shapeProps={arrow}
-                  isSelected={arrow.id === this.state.selectedId2}
-                  onSelect={() => {
-                    this.setState({
-                      selectedId2: arrow.id
-                    })
-                  }}
-                  onChange={(newAttrs) => {
-                    const arrows1 = this.state.arrows.slice();
-                    arrows1[i] = newAttrs;
-                    this.setState({
-                      arrows: arrows1
-                    })
-                  }}
+                  pgData={this.state.pageDataFromChild}
                 />
               );
             })}
@@ -235,7 +195,7 @@ class App extends Component {
 
           {this.state.arrows2.map((arrow2, i) => {
             return(
-              <TestArrow 
+              <Arrows 
                 key={i}
                 shapeProps={arrow2}
                 isSelected={arrow2.id === this.state.selectedId4}
@@ -255,6 +215,7 @@ class App extends Component {
             );
           })}
           
+          {/*<TestLocalStorage />*/}
           </Layer>
         </Stage>
         </div>    

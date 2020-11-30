@@ -25,7 +25,7 @@ export class PDFViewer extends Component {
 
     handleClick() {
 
-        console.log(PdfJsLib);
+        //console.log(PdfJsLib);
 
         PdfJsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
         PdfJsLib.getDocument('./myPDF.pdf').promise.then(pdfDoc_ => {
@@ -38,8 +38,8 @@ export class PDFViewer extends Component {
 
             this.renderPage(this.state.actualPage);
 
-            console.log(this.state.pages);
-            console.log(pdfDoc);
+            //console.log(this.state.pages);
+            //console.log(pdfDoc);
         
         }).catch(err => { console.log(JSON.stringify(err)) });
     }
@@ -50,7 +50,7 @@ export class PDFViewer extends Component {
         pdfDoc.getPage(num).then(page => {
 
             let canvas = document.getElementById('pdf-render');
-            console.log(canvas);
+            //console.log(canvas);
             let ctx = canvas.getContext('2d');
 
             const viewport = page.getViewport({ scale });
@@ -76,7 +76,8 @@ export class PDFViewer extends Component {
             actualPage: num
         });
 
-        console.log(this.state.actualPage);
+        this.props.cPage(num);
+        //console.log(this.state.actualPage);
     }
 
     queueRenderPage = num => {

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="Konva demo">
+  <script src="https://unpkg.com/konva@^2/konva.min.js"></script>
+  <meta charset="utf-8">
+  <script src="https://unpkg.com/pdf-lib@1.4.0"></script>
+  <script src="https://unpkg.com/downloadjs@1.4.7"></script>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="container"></div>
+  <p>Click the button to modify an existing PDF document with <code>pdf-lib</code></p>
+    <button onclick="modifyPdf()">Modify PDF</button>
+    <!--<div id="buttons"><button id="save">Save as image</button></div>-->
+    <p class="small">(Your browser will download the resulting file)</p>
+
+  <script>
+
+        const { degrees, PDFDocument, rgb, StandardFonts, drawImage } = PDFLib
+
+        async function modifyPdf() {
+        // Fetch an existing PDF document
+        const url = 'myPDF.pdf'
+        const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
+
+        // Load a PDFDocument from the existing PDF bytes
+        const pdfDoc = await PDFDocument.load(existingPdfBytes)
+
+        // Embed the Helvetica font
+        const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
+
+        // Get the first page of the document
+        const pages = pdfDoc.getPages()
+        const firstPage = pages[0]
+
+        // Get the width and height of the first page
+        const { width, height } = firstPage.getSize()
+
+
+        
+
+        //__________
+
+        const pngUrl = 'arrow.png'
+
+        
+        const pngImageBytes = await fetch(pngUrl).then((res) => res.arrayBuffer())
+
+                
+        const pngImage = await pdfDoc.embedPng(pngImageBytes)
+
+        
+        const pngDims = pngImage.scale(0.3)
+
+        const page = pdfDoc.addPage()
+
+        firstPage.drawImage(pngImage, {
+            x: page.getWidth() / 2 - pngDims.width / 2 + 100,
+            y: page.getHeight() / 2 - pngDims.height / 2 + 200,
+            width: pngDims.width,
+            height: pngDims.height,
+        })
+
+        const pdfBytes = await pdfDoc.save()
+        download(pdfBytes, "pdf-download.pdf", "application/pdf");
+    }
+
+    /*
+      var width = window.innerWidth;
+      var height = window.innerHeight;
+
+      var stage = new Konva.Stage({
+        container: 'container',
+        width: width,
+        height: height,
+      });
+
+      var layer = new Konva.Layer();
+      stage.add(layer);
+
+      var arrow = new Konva.Arrow({
+        x: 100,
+        y: 100,
+        points: [0, 0, 200, 200],
+        pointerLength: 20,
+        pointerWidth: 20,
+        fill: 'Red',
+        stroke: 'Red',
+        strokeWidth: 5,
+      });
+      layer.add(arrow);
+
+      layer.draw();
+
+      // function from https://stackoverflow.com/a/15832662/512042
+      function downloadURI(uri, name) {
+        var link = document.createElement('a');
+        link.download = name;
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        delete link;
+      }
+
+      document.getElementById('save').addEventListener(
+        'click',
+        function () {
+          var dataURL = stage.toDataURL({ pixelRatio: 3 });
+          downloadURI(dataURL, 'arrow.png');
+        },
+        false
+      );*/
+    </script>
+</body>
+</html>
