@@ -4,8 +4,8 @@ import './App.css';
 import { PDFViewer } from './components/PDFViewer';
 import { Rectangle } from './components/Rectangle';
 import { TextEdit } from './components/TextEdit';
-import { TestArrow } from './components/TestArrow';
-import LocalStorage from './components/LocalStorage';
+import { Arrows } from './components/Arrows';
+//import LocalStorage from './components/LocalStorage';
 //import { TestLocalStorage } from './components/TestLocalStorage';
 
 let idnum = 0;
@@ -139,7 +139,7 @@ class App extends Component {
             <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addArrow2()}><i className="fas fa-location-arrow"></i></button>
             <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addText()}><i className="fas fas fa-font"></i></button>
             <input id="text-area" placeholder=" Write text here..."style={{float:"right", marginRight:5, margin:5, height: 35, fontSize: 20}} />
-            <LocalStorage pgData={this.state.pageDataFromChild} />
+            {/*<LocalStorage pgData={this.state.pageDataFromChild} />*/}
         </div>
 
         <Stage id="id-stage" width={1224} height={1200}
@@ -195,7 +195,7 @@ class App extends Component {
 
           {this.state.arrows2.map((arrow2, i) => {
             return(
-              <TestArrow 
+              <Arrows 
                 key={i}
                 shapeProps={arrow2}
                 isSelected={arrow2.id === this.state.selectedId4}

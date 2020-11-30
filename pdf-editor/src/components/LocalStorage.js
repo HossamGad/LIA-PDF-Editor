@@ -57,14 +57,17 @@ useEffect(() => {
   localStorage.setItem("notes", json);
 }, [notes]);
 */
+
+
   render() {
     return (
       <div className="local-storage">
         {/*<h1>{this.state.rectangel}</h1>*/}
-        <h1>{this.props.pgData}</h1>
+        {/*<h1>{this.props.pgData}</h1>*/}
       </div>
     );
   } 
 };
+
 
 export default LocalStorage;

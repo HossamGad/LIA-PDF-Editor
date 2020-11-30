@@ -1,7 +1,7 @@
 import React from 'react';
 import { Arrow, Rect } from 'react-konva';
 
-export const TestArrow = ({ shapeProps, isSelected, onSelect, onChange }) => {
+export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
     const arrowRef = React.useRef();
     const circle1Ref = React.useRef();
@@ -10,8 +10,8 @@ export const TestArrow = ({ shapeProps, isSelected, onSelect, onChange }) => {
     const [ax1, setAx1] = React.useState(150);
     const [ay1, setAy1] = React.useState(150);
 
-    const [ax2, setAx2] = React.useState(200);
-    const [ay2, setAy2] = React.useState(0);
+    const [ax2, setAx2] = React.useState(100);
+    const [ay2, setAy2] = React.useState(100);
 
     const [x1, setX1] = React.useState(90);
     const [y1, setY1] = React.useState(90);
@@ -20,11 +20,29 @@ export const TestArrow = ({ shapeProps, isSelected, onSelect, onChange }) => {
     const [y2, setY2] = React.useState(90);
 
     React.useEffect(() => {
+        
+        if(arrowRef.current.attrs.points[3] <= 5 && arrowRef.current.attrs.points[3] >= -5) {
 
-        setX1(arrowRef.current.attrs.x);
-        setY1(arrowRef.current.attrs.y);
-        setX2(x1 + arrowRef.current.attrs.points[2]);
-        setY2(y1 + arrowRef.current.attrs.points[3]);
+            setX1(arrowRef.current.attrs.x - 5);
+            setY1(arrowRef.current.attrs.y - 5);
+            setX2(x1 + arrowRef.current.attrs.points[2] + 5);
+            setY2(y1 + arrowRef.current.attrs.points[3]);
+
+        } else if(arrowRef.current.attrs.points[2] <= 5 && arrowRef.current.attrs.points[2] >= -5) {
+
+            setX1(arrowRef.current.attrs.x - 5);
+            setY1(arrowRef.current.attrs.y - 5);
+            setX2(x1 + arrowRef.current.attrs.points[2]);
+            setY2(y1 + arrowRef.current.attrs.points[3] + 5);
+
+        } else {
+
+            setX1(arrowRef.current.attrs.x - 5);
+            setY1(arrowRef.current.attrs.y - 5);
+            setX2(x1 + arrowRef.current.attrs.points[2] + 5);
+            setY2(y1 + arrowRef.current.attrs.points[3] + 5);
+
+        }
 
         if(isSelected) {
             circle1Ref.current.attrs.x = x1;
@@ -71,11 +89,17 @@ export const TestArrow = ({ shapeProps, isSelected, onSelect, onChange }) => {
                 fill= 'Red'
                 stroke= 'Red'
                 strokeWidth= {5}
+                draggable
+                onDragMove={() => {
+                    setX1(arrowRef.current.attrs.x);
+                    setY1(arrowRef.current.attrs.y);
+
+                }}
             />
             {isSelected && <Rect 
                 ref={circle1Ref}
-                x= {x1 - 5}
-                y= {y1 - 5}
+                x= {x1}
+                y= {y1}
                 width= {10}
                 height={10}
                 closed
@@ -86,14 +110,17 @@ export const TestArrow = ({ shapeProps, isSelected, onSelect, onChange }) => {
                     setAx1(circle1Ref.current.attrs.x);
                     setAy1(circle1Ref.current.attrs.y);
 
-                    setX2(arrowRef.current.attrs.x + ax2 + 5);
-                    setY2(arrowRef.current.attrs.y + ay2 + 5);
+                    setAx2(circle2Ref.current.attrs.x - circle1Ref.current.attrs.x + 5);
+                    setAy2(circle2Ref.current.attrs.y - circle1Ref.current.attrs.y + 5);
+
+                    //setX2(arrowRef.current.attrs.x + ax2 + 5);
+                    //setY2(arrowRef.current.attrs.y + ay2 + 5);
                 }}
             />}
             {isSelected && <Rect 
                 ref={circle2Ref}
-                x={x2 - 5}
-                y= {y2 - 5}
+                x= {x2}
+                y= {y2}
                 width= {10}
                 height= {10}
                 closed
@@ -101,8 +128,8 @@ export const TestArrow = ({ shapeProps, isSelected, onSelect, onChange }) => {
                 fill= 'white'
                 draggable
                 onDragMove={() => {
-                    setAx2(circle2Ref.current.attrs.x - x1 + 5);
-                    setAy2(circle2Ref.current.attrs.y - y1 + 5);
+                    setAx2(circle2Ref.current.attrs.x - circle1Ref.current.attrs.x + 5);
+                    setAy2(circle2Ref.current.attrs.y - circle1Ref.current.attrs.y + 5);
                 }}
             />}
         </React.Fragment>
