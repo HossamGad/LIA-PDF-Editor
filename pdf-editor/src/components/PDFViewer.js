@@ -115,7 +115,7 @@ export class PDFViewer extends Component {
                 <button className="btn" id="next-page" style={{float:"left"}} onClick={this.showNextPage}>
                     Next Page <i className="fas fa-arrow-circle-right"></i>
                 </button>
-                <button className="btn" id="load-pdf" onClick={this.handleClick}>Load PDF</button>
+                <button className="btn" id="load-pdf" onClick={this.handleClick}>Upload PDF</button>
                 <span className="page-info" style={{float:"left"}}>
                     Page <span id="page-num">{ this.state.actualPage }</span> of <span id="page-count">{ this.state.pages }</span>
                 </span>
