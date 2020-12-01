@@ -12,12 +12,13 @@
   <div id="container"></div>
   <p>Click the button to modify an existing PDF document with <code>pdf-lib</code></p>
     <button onclick="modifyPdf()">Modify PDF</button>
+    <br />
     <!--<div id="buttons"><button id="save">Save as image</button></div>-->
     <p class="small">(Your browser will download the resulting file)</p>
 
   <script>
 
-        const { degrees, PDFDocument, rgb, StandardFonts, drawImage } = PDFLib
+        const { degrees, PDFDocument, rgb, StandardFonts, drawImage, drawText } = PDFLib
 
         async function modifyPdf() {
         // Fetch an existing PDF document
@@ -33,22 +34,28 @@
         // Get the first page of the document
         const pages = pdfDoc.getPages()
         const firstPage = pages[0]
+        const secondPage = pages[1]
+        const thirdPage = pages[2]
+
+        //console.log(secondPage);
 
         // Get the width and height of the first page
         const { width, height } = firstPage.getSize()
-
-
-        
+        const width1 = secondPage.getSize().width
+        const height1 = secondPage.getSize().height
+        const height2 = thirdPage.getSize().height
+        const width2 = thirdPage.getSize().width
 
         //__________
 
         const pngUrl = 'arrow.png'
+        const png1Url = 'rectangle.png'
 
-        
         const pngImageBytes = await fetch(pngUrl).then((res) => res.arrayBuffer())
-
-                
+        const pngImage1Bytes = await fetch(png1Url).then((res) => res.arrayBuffer())
+     
         const pngImage = await pdfDoc.embedPng(pngImageBytes)
+        const pngImage1 = await pdfDoc.embedPng(pngImage1Bytes)
 
         
         const pngDims = pngImage.scale(0.3)
@@ -56,6 +63,22 @@
         const page = pdfDoc.addPage()
 
         firstPage.drawImage(pngImage, {
+            x: page.getWidth() / 2 - pngDims.width / 2 + 100,
+            y: page.getHeight() / 2 - pngDims.height / 2 + 200,
+            width: pngDims.width,
+            height: pngDims.height,
+        })
+
+        secondPage.drawText('Write your text here ....!', {
+        x: 5,
+        y: height1 / 2 + 300,
+        size: 50,
+        font: helveticaFont,
+        color: rgb(0.95, 0.1, 0.1),
+        rotate: degrees(-45),
+      })
+
+        thirdPage.drawImage(pngImage1, {
             x: page.getWidth() / 2 - pngDims.width / 2 + 100,
             y: page.getHeight() / 2 - pngDims.height / 2 + 200,
             width: pngDims.width,
@@ -79,17 +102,15 @@
       var layer = new Konva.Layer();
       stage.add(layer);
 
-      var arrow = new Konva.Arrow({
-        x: 100,
-        y: 100,
-        points: [0, 0, 200, 200],
-        pointerLength: 20,
-        pointerWidth: 20,
-        fill: 'Red',
-        stroke: 'Red',
-        strokeWidth: 5,
+      var rectangle = new Konva.Rect({
+        x: 300,
+        y: 300,
+        width: 100,
+        height: 30,
+        fill: 'Yellow',
+        opacity: 0.5
       });
-      layer.add(arrow);
+      layer.add(rectangle);
 
       layer.draw();
 
@@ -108,10 +129,11 @@
         'click',
         function () {
           var dataURL = stage.toDataURL({ pixelRatio: 3 });
-          downloadURI(dataURL, 'arrow.png');
+          downloadURI(dataURL, 'rectangle.png');
         },
         false
       );*/
+      
     </script>
 </body>
 </html>

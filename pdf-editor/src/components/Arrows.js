@@ -20,29 +20,12 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
     const [y2, setY2] = React.useState(90);
 
     React.useEffect(() => {
-        
-        if(arrowRef.current.attrs.points[3] <= 5 && arrowRef.current.attrs.points[3] >= -5) {
 
-            setX1(arrowRef.current.attrs.x - 5);
-            setY1(arrowRef.current.attrs.y - 5);
-            setX2(x1 + arrowRef.current.attrs.points[2] + 5);
-            setY2(y1 + arrowRef.current.attrs.points[3]);
+        setX1(arrowRef.current.attrs.x - 5);
+        setY1(arrowRef.current.attrs.y - 5);
 
-        } else if(arrowRef.current.attrs.points[2] <= 5 && arrowRef.current.attrs.points[2] >= -5) {
-
-            setX1(arrowRef.current.attrs.x - 5);
-            setY1(arrowRef.current.attrs.y - 5);
-            setX2(x1 + arrowRef.current.attrs.points[2]);
-            setY2(y1 + arrowRef.current.attrs.points[3] + 5);
-
-        } else {
-
-            setX1(arrowRef.current.attrs.x - 5);
-            setY1(arrowRef.current.attrs.y - 5);
-            setX2(x1 + arrowRef.current.attrs.points[2] + 5);
-            setY2(y1 + arrowRef.current.attrs.points[3] + 5);
-
-        }
+        setX2(arrowRef.current.attrs.x + arrowRef.current.attrs.points[2] - 5);
+        setY2(arrowRef.current.attrs.y + arrowRef.current.attrs.points[3] - 5);
 
         if(isSelected) {
             circle1Ref.current.attrs.x = x1;
@@ -93,7 +76,6 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
                 onDragMove={() => {
                     setX1(arrowRef.current.attrs.x);
                     setY1(arrowRef.current.attrs.y);
-
                 }}
             />
             {isSelected && <Rect 
@@ -107,14 +89,11 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
                 fill = 'white' 
                 draggable
                 onDragMove={() => {
-                    setAx1(circle1Ref.current.attrs.x);
-                    setAy1(circle1Ref.current.attrs.y);
+                    setAx1(circle1Ref.current.attrs.x + 5);
+                    setAy1(circle1Ref.current.attrs.y + 5);
 
-                    setAx2(circle2Ref.current.attrs.x - circle1Ref.current.attrs.x + 5);
-                    setAy2(circle2Ref.current.attrs.y - circle1Ref.current.attrs.y + 5);
-
-                    //setX2(arrowRef.current.attrs.x + ax2 + 5);
-                    //setY2(arrowRef.current.attrs.y + ay2 + 5);
+                    setAx2(circle2Ref.current.attrs.x - circle1Ref.current.attrs.x);
+                    setAy2(circle2Ref.current.attrs.y - circle1Ref.current.attrs.y);
                 }}
             />}
             {isSelected && <Rect 
@@ -128,8 +107,8 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
                 fill= 'white'
                 draggable
                 onDragMove={() => {
-                    setAx2(circle2Ref.current.attrs.x - circle1Ref.current.attrs.x + 5);
-                    setAy2(circle2Ref.current.attrs.y - circle1Ref.current.attrs.y + 5);
+                    setAx2(circle2Ref.current.attrs.x - circle1Ref.current.attrs.x);
+                    setAy2(circle2Ref.current.attrs.y - circle1Ref.current.attrs.y);
                 }}
             />}
         </React.Fragment>
