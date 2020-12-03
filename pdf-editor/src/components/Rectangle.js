@@ -1,7 +1,7 @@
 import React from 'react';
 import { Rect, Transformer } from 'react-konva';
 
-export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
+export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParentStageElem, getParentLayerElem }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
   
@@ -61,28 +61,35 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
     }
   }, [setRx1, setRy1, setW1, setH1]);
   */
+  
   React.useEffect(() => {
 
     if (isSelected) {
+      
       // we need to attach transformer manually
-      trRef.current.nodes([shapeRef.current]);
-      trRef.current.getLayer().batchDraw();
+        trRef.current.nodes([shapeRef.current]);
+        trRef.current.getLayer().batchDraw();
+
       document.addEventListener("keydown", function(event) {
         if (event.key === 'Delete') {
           setDeleted(true);
 
           setDeleted(false);
             if(deleted === false) {
-              const textNode = shapeRef.current;
-              //const tr = trRef.current;
-              
-              textNode.destroy();
-              //tr.destroy();
+              const rectNode = shapeRef.current;
+              const trNode = trRef.current
+
+              if(trNode === null) {
+                return;
+              } else {
+                //trRef.destroy();
+                rectNode.destroy();
+              }  
             }
         }
       });
     }
-  }, [deleted, isSelected]);
+  }, [deleted, isSelected, getParentStageElem, getParentLayerElem]);
 
   return (
     <React.Fragment>

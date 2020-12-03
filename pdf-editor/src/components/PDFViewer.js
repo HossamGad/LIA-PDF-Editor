@@ -90,7 +90,7 @@ export class PDFViewer extends Component {
 
     showPrevPage() {
         let p = this.state.actualPage;
-        if (p <= 1) {
+        if (p === 0 || p <= 1) {
             return;
         }
         p--;
@@ -99,7 +99,7 @@ export class PDFViewer extends Component {
       
     showNextPage() {
         let p = this.state.actualPage;
-        if (p >= pdfDoc.numPages) {
+        if (p === 0 || p >= pdfDoc.numPages) {
             return;
         }
         p++;
