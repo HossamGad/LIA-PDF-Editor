@@ -18,6 +18,33 @@
 
   <script>
 
+let arrows = [
+ {
+  page: 1,
+  type:"arrow",
+  x1: 100,
+  y1: 100,
+  x2: 120,
+  y2: 150,
+  },
+ {
+  page: 1,
+  type:"arrow",
+  x1: 140,
+  y1: 100,
+  x2: 320,
+  y2: 150,
+  },
+ {
+  page: 2,
+  type:"arrow",
+  x1: 200,
+  y1: 100,
+  x2: 220,
+  y2: 150,
+  },
+ ]
+
         const { degrees, PDFDocument, rgb, StandardFonts, drawImage, drawText } = PDFLib
 
         async function modifyPdf() {
