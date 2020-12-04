@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Stage, Layer} from 'react-konva';
 import './App.css';
 import { PDFViewer } from './components/PDFViewer';
+import { PDFDownload } from './components/PDFDownload';
 import { Rectangle } from './components/Rectangle';
 import { TextEdit } from './components/TextEdit';
 import { Arrows } from './components/Arrows';
@@ -134,7 +135,7 @@ class App extends Component {
       <div id="id-app" className="App" style={{position: 'absolute', overflow: 'hidden', top :55, left: 0, zIndex: 2}}>
         <div id="tbar" className="top-bar" style={{zIndex: 3}}>
             <PDFViewer cPage={this.callbackPage} />
-            <button className="btn" id="download-pdf" onClick={this.handleClick}>Download PDF</button>
+            <PDFDownload />
             <button id="idrect" className="btn" style={{float:"right", marginRight:40}} onClick={() => this.addRectangle()}><i className="far fa-square"></i></button>
             <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addArrow2()}><i className="fas fa-location-arrow"></i></button>
             <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addText()}><i className="fas fas fa-font"></i></button>
