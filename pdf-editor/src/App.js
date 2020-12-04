@@ -142,11 +142,11 @@ class App extends Component {
             {/*<LocalStorage pgData={this.state.pageDataFromChild} />*/}
         </div>
 
-        <Stage id="id-stage" width={1224} height={1200}
+        <Stage ref={this.stageElem} id="id-stage" width={1224} height={1200}
           onMouseDown={this.checkDeselect}
           onTouchStart={this.checkDeselect}
         >
-          <Layer>
+          <Layer ref={this.layerElem}>
             
             {this.state.rectangles.map((rect, i) => {
               return (

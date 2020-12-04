@@ -48,8 +48,16 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
                 setDeleted(false);
                   if(deleted === false) {
                     const arrowNode = arrowRef.current;
+                    const circle1Node = circle1Ref.current;
+                    const circle2Node = circle2Ref.current;
                     
-                    arrowNode.destroy();
+                    if(circle1Node === null) {
+                        return;
+                    } else {
+                        circle1Node.destroy();
+                        circle2Node.destroy();
+                        arrowNode.destroy();
+                    }   
                   }
               }
             });

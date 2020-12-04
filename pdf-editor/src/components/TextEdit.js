@@ -13,6 +13,7 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
       // we need to attach transformer manually
       trRef.current.nodes([shapeRef.current]);
       trRef.current.getLayer().batchDraw();
+
       document.addEventListener("keydown", function(event) {
         if (event.key === 'Delete') {
           setDeleted(true);
@@ -20,10 +21,14 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
           setDeleted(false);
             if(deleted === false) {
               const textNode = shapeRef.current;
-              //const tr = trRef.current;
+              const trNode = trRef.current
               
-              textNode.destroy();
-              //tr.destroy();
+              if(trNode === null) {
+                return;
+              } else {
+                //trRef.destroy();
+                textNode.destroy();
+              } 
             }
         }
       });

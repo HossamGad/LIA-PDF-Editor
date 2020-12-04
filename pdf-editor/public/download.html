@@ -18,6 +18,33 @@
 
   <script>
 
+let arrows = [
+ {
+  page: 1,
+  type:"arrow",
+  x1: 100,
+  y1: 100,
+  x2: 120,
+  y2: 150,
+  },
+ {
+  page: 1,
+  type:"arrow",
+  x1: 140,
+  y1: 100,
+  x2: 320,
+  y2: 150,
+  },
+ {
+  page: 2,
+  type:"arrow",
+  x1: 200,
+  y1: 100,
+  x2: 220,
+  y2: 150,
+  },
+ ]
+
         const { degrees, PDFDocument, rgb, StandardFonts, drawImage, drawText } = PDFLib
 
         async function modifyPdf() {
@@ -36,6 +63,7 @@
         const firstPage = pages[0]
         const secondPage = pages[1]
         const thirdPage = pages[2]
+        const fourthPage = pages[3]
 
         //console.log(secondPage);
 
@@ -45,18 +73,22 @@
         const height1 = secondPage.getSize().height
         const height2 = thirdPage.getSize().height
         const width2 = thirdPage.getSize().width
+        const height3 = fourthPage.getSize().height
+        const width3 = fourthPage.getSize().width
 
         //__________
 
         const pngUrl = 'arrow.png'
         const png1Url = 'rectangle.png'
+        const png2Url = 'textandsymbols.png'
 
         const pngImageBytes = await fetch(pngUrl).then((res) => res.arrayBuffer())
         const pngImage1Bytes = await fetch(png1Url).then((res) => res.arrayBuffer())
+        const pngImage2Bytes = await fetch(png2Url).then((res) => res.arrayBuffer())
      
         const pngImage = await pdfDoc.embedPng(pngImageBytes)
         const pngImage1 = await pdfDoc.embedPng(pngImage1Bytes)
-
+        const pngImage2 = await pdfDoc.embedPng(pngImage2Bytes)
         
         const pngDims = pngImage.scale(0.3)
 
@@ -85,6 +117,13 @@
             height: pngDims.height,
         })
 
+        fourthPage.drawImage(pngImage2, {
+            x: page.getWidth() / 2 - pngDims.width / 2 + 100,
+            y: page.getHeight() / 2 - pngDims.height / 2 + 200,
+            width: pngDims.width,
+            height: pngDims.height,
+        })
+
         const pdfBytes = await pdfDoc.save()
         download(pdfBytes, "pdf-download.pdf", "application/pdf");
     }
@@ -101,16 +140,38 @@
 
       var layer = new Konva.Layer();
       stage.add(layer);
-
+      
       var rectangle = new Konva.Rect({
-        x: 300,
-        y: 300,
+        x: 400,
+        y: 250,
         width: 100,
         height: 30,
         fill: 'Yellow',
         opacity: 0.5
       });
+
+      var arrow = new Konva.Arrow({
+        x: 550,
+        y: 390,
+        points: [0, 0, -100, -100],
+        pointerLength : 20,
+        pointerWidth: 20,
+        fill: 'Red',
+        stroke: 'Red',
+        strokeWidth: 5
+      });
+
+      var txt = new Konva.Text({
+        x: 450,
+        y: 390,
+        text: 'Test text',
+        fontSize: 50,
+        fontFamily: 'Calibri'
+      });
+
       layer.add(rectangle);
+      layer.add(arrow);
+      layer.add(txt);
 
       layer.draw();
 
@@ -129,11 +190,11 @@
         'click',
         function () {
           var dataURL = stage.toDataURL({ pixelRatio: 3 });
-          downloadURI(dataURL, 'rectangle.png');
+          downloadURI(dataURL, 'textandsymbols.png');
         },
         false
-      );*/
-      
+      );
+      */
     </script>
 </body>
 </html>
