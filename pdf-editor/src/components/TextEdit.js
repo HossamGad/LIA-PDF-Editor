@@ -1,12 +1,51 @@
 import React from 'react';
 import { Text, Transformer } from 'react-konva';
 
+export const textArray = [];
+
+const importTexts = (p, id, x, y, txt) => {
+
+  if(p === undefined) {
+    return;
+  }
+
+  for(let i = 0; i < textArray.length; i++){ 
+    
+    if ( textArray[i].id === 'text'+JSON.stringify(i+1)) { 
+
+      textArray.splice(i, 1);
+    }
+  }
+  
+  textArray.push({pg: p, id: id, x: x, y: y, text: txt});
+  console.log(textArray);
+  let arr = textArray;
+  console.log(arr);
+  //return arr;
+};
+
 export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
 
   const [visible, setVisible] = React.useState(true);
   const [deleted, setDeleted] = React.useState(false);
+
+  const [tx1, setTx1] = React.useState(0);
+  const [ty1, setTy1] = React.useState(0);
+
+  React.useEffect(() => {
+
+    setTx1(shapeRef.current.attrs.x);
+    setTy1(shapeRef.current.attrs.y);
+
+    let pageNumSpan = document.getElementById('page-num');
+
+    let txt = shapeProps.text;
+
+    importTexts(pageNumSpan.innerText, shapeProps.id, tx1, ty1, txt);
+  
+  }, [setTx1, setTy1, tx1, ty1, shapeProps]);
 
   React.useEffect(() => {
     if (isSelected) {

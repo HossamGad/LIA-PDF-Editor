@@ -132,7 +132,7 @@ class App extends Component {
       <div id="test-div" style={{position: 'absolute', top: 200, left: 200, zIndex: 4}}>
 
       </div>
-      <div id="id-app" className="App" style={{position: 'absolute', overflow: 'hidden', top :55, left: 0, zIndex: 2}}>
+      <div id="id-app" className="App" style={{position: 'absolute', overflow: 'hidden', top :82, left: 0, zIndex: 2}}>
         <div id="tbar" className="top-bar" style={{zIndex: 3}}>
             <PDFViewer cPage={this.callbackPage} />
             <PDFDownload />
@@ -143,7 +143,7 @@ class App extends Component {
             {/*<LocalStorage pgData={this.state.pageDataFromChild} />*/}
         </div>
 
-        <Stage ref={this.stageElem} id="id-stage" width={1224} height={1200}
+        <Stage ref={this.stageElem} id="id-stage" width={918} height={1188}
           onMouseDown={this.checkDeselect}
           onTouchStart={this.checkDeselect}
         >
