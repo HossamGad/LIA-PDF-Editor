@@ -19,9 +19,6 @@ const importTexts = (p, id, x, y, txt) => {
   
   textArray.push({pg: p, id: id, x: x, y: y, text: txt});
   console.log(textArray);
-  let arr = textArray;
-  console.log(arr);
-  //return arr;
 };
 
 export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {

@@ -19,9 +19,6 @@ const importRects = (p, id, x, y, w, h) => {
   
   rectArray.push({pg: p, id: id, x: x, y: y, w: w, h: h});
   console.log(rectArray);
-  let arr = rectArray;
-  console.log(arr);
-  //return arr;
 };
 
 export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParentStageElem, getParentLayerElem }) => {
