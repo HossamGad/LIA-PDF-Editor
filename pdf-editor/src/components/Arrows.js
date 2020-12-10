@@ -1,14 +1,34 @@
 import React from 'react';
 import { Arrow, Rect } from 'react-konva';
 
+export const arrowsArray = [];
+
+const importArrows = (p, id, x1, y1, x2, y2) => {
+
+  if(p === undefined) {
+    return;
+  }
+
+  for(let i = 0; i < arrowsArray.length; i++){ 
+    
+    if ( arrowsArray[i].id === '2arrow'+JSON.stringify(i+1)) { 
+
+        arrowsArray.splice(i, 1);
+    }
+  }
+  
+  arrowsArray.push({pg: p, id: id, x1: x1, y1: y1, x2: x2, y2: y2});
+  console.log(arrowsArray);
+};
+
 export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
     const arrowRef = React.useRef();
     const circle1Ref = React.useRef();
     const circle2Ref = React.useRef();
 
-    const [ax1, setAx1] = React.useState(150);
-    const [ay1, setAy1] = React.useState(150);
+    const [ax1, setAx1] = React.useState(0);
+    const [ay1, setAy1] = React.useState(0);
 
     const [ax2, setAx2] = React.useState(100);
     const [ay2, setAy2] = React.useState(100);
@@ -38,6 +58,15 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
     }, [x1, y1, x2, y2, isSelected]);
 
     const [deleted, setDeleted] = React.useState(false);
+
+    React.useEffect(() => {
+
+        let pageNumSpan = document.getElementById('page-num');
+
+        console.log(ax1);
+        importArrows(pageNumSpan.innerText, shapeProps.id, ax1, ay1, ax2, ay2);
+
+    }, [ax1, ay1, ax2, ay2, shapeProps])
 
     React.useEffect(() => {
         if (isSelected) {
@@ -84,6 +113,9 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
                 onDragMove={() => {
                     setX1(arrowRef.current.attrs.x);
                     setY1(arrowRef.current.attrs.y);
+
+                    setAx1(arrowRef.current.attrs.x);
+                    setAy1(arrowRef.current.attrs.y);
                 }}
             />
             {isSelected && <Rect 

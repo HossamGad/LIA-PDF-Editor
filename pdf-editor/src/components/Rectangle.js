@@ -1,6 +1,26 @@
 import React from 'react';
 import { Rect, Transformer } from 'react-konva';
 
+export const rectArray = [];
+
+const importRects = (p, id, x, y, w, h) => {
+
+  if(p === undefined) {
+    return;
+  }
+
+  for(let i = 0; i < rectArray.length; i++){ 
+    
+    if ( rectArray[i].id === 'rect'+JSON.stringify(i+1)) { 
+
+        rectArray.splice(i, 1);
+    }
+  }
+  
+  rectArray.push({pg: p, id: id, x: x, y: y, w: w, h: h});
+  console.log(rectArray);
+};
+
 export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParentStageElem, getParentLayerElem }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
@@ -11,8 +31,8 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
 
   const [deleted, setDeleted] = React.useState(false);
   
-  const [rx1, setRx1] = React.useState(300);
-  const [ry1, setRy1] = React.useState(300);
+  const [rx1, setRx1] = React.useState(0);
+  const [ry1, setRy1] = React.useState(0);
 
   const [w1, setW1] = React.useState(200);
   const [h1, setH1] = React.useState(30);
@@ -40,6 +60,10 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
       w: w1,
       h: h1
     }];
+
+    console.log(h1);
+
+    importRects(pageNumSpan.innerText, shapeProps.id, rx1, ry1, w1, h1);
 
     const json = JSON.stringify(localStorageRectangle);
     localStorage.setItem(shapeProps.id, json);
