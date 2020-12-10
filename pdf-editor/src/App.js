@@ -108,7 +108,6 @@ class App extends Component {
     this.setState({
       pageDataFromChild: data
     });
-    //console.log(data);
   }
 
   checkDeselect(e) {

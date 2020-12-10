@@ -32,37 +32,26 @@ export class PDFDownload extends Component {
         const pageIndex = parseInt(rectArray[0].pg) - 1;
         console.log("I am drawing on this page", pageIndex + 1);
         const currentPage = pages[pageIndex];
-        // const firstPage = pages[0]
-        // const secondPage = pages[1]
        
-
-        //console.log(secondPage);
-
         // Get the width and height of the first page
         const { width, height } = currentPage.getSize()
         console.log(width, height);
-        /*
-        const width1 = secondPage.getSize().width
-        const height1 = secondPage.getSize().height
-        const height2 = thirdPage.getSize().height
-        const width2 = thirdPage.getSize().width
-        const height3 = fourthPage.getSize().height
-        const width3 = fourthPage.getSize().width*/
-       
-        //const pngDims = pngImage.scale(0.3)
+        
+        let arX1 = arrowsArray[0].x1*0.667;
+        let arY1 = arrowsArray[0].y1*0.667;
+        let arX2 = arrowsArray[0].x1*0.667 + arrowsArray[0].x2*0.667;
+        let arY2 = arrowsArray[0].y1*0.667 + arrowsArray[0].y2*0.667;
 
-        //const page = pdfDoc.addPage()
+        console.log(arX1, arX2);
 
-        let arX1 = arrowsArray[0].x1;
-        let arY1 = arrowsArray[0].y1;
-        let arX2 = arrowsArray[0].x1 + arrowsArray[0].x2;
-        let arY2 = arrowsArray[0].y1 + arrowsArray[0].y2;
+        let vrad = arX2 > arX1 ? Math.atan((arY2 - arY1) / (arX2 - arX1)) : Math.atan((arY1 - arY2) / (arX1 - arX2));
 
-        let vrad = Math.atan((arY2 - arY1)/(arX2 - arX1));
         let vdeg = vrad * (180/Math.PI);
 
-        let length1 = Math.sqrt(Math.pow((arY2 - arY1), 2) + Math.pow((arX2 - arX1), 2));
-
+        console.log(vdeg);
+        
+        let length1 = arX2 > arX1 ? Math.sqrt(Math.pow((arY2 - arY1), 2) + Math.pow((arX2 - arX1), 2)) : Math.sqrt(Math.pow((arY1 - arY2), 2) + Math.pow((arX1 - arX2), 2));
+        
         let pl = 20;
         let pw = 20;
 
@@ -70,41 +59,32 @@ export class PDFDownload extends Component {
 
         let x3pr = Math.cos(vrad)*length2;
         let y3pr = Math.sin(vrad)*length2;
-
-        let x3 = arX1 + x3pr;
-        let y3 = arY1 + y3pr;
-
+        
+        let x3 = arX2 > arX1 ? arX1 + x3pr : arX1 - x3pr;
+        let y3 = arX2 > arX1 ? arY1 + y3pr : arY1 - y3pr;
+        
         let x4pr = Math.sin(vrad)*(pw/2);
         let y4pr = Math.cos(vrad)*(pw/2);
 
-        let x4 = x3 + x4pr;
-        let y4 = y3 - y4pr;
+        let x4 = arX2 > arX1 ? x3 + x4pr : x3 - x4pr;
+        let y4 = arX2 > arX1 ? y3 - y4pr : y3 + y4pr;
 
-        let x5 = x3 - x4pr;
-        let y5 = y3 + y4pr;
+        let x5 = arX2 > arX1 ? x3 - x4pr : x3 + x4pr;
+        let y5 = arX2 > arX1 ? y3 + y4pr : y3 - y4pr;
 
         console.log(arX1, arY1, arX2, arY2, vdeg, x3, y3, x4, y4, x5, y5);
         console.log(x3pr, y3pr);
         
-        //_____
         const svgPath =
-            'M'+arX1+' '+arY1+'L'+arX2+' '+arY2+' M'+x3+' '+y3+' L'+x4+' '+y4+' L'+arX2+' '+arY2+' L'+x5+' '+y5+''
+            'M'+arX1+' '+arY1+'L'+arX2+' '+arY2+' M'+x3+' '+y3+' L'+x4+' '+y4+' L'+arX2+' '+arY2+' L'+x5+' '+y5+' L'+x3+' '+y3+''
 
-            //M101 180 L110 179 L101 200 L90 180 Z
-        //const svgPath3 =
-            //'M250 300 L255 295 L260 310 L245 305 Z M'+arrows[1].x1+' '+arrows[1].y1+' L'+arrows[1].x2+' '+arrows[1].y2+''
-        
-        currentPage.moveTo(100, currentPage.getHeight() -5);
+        console.log(currentPage.getHeight());
+        currentPage.moveTo(0, currentPage.getHeight() +25);
 
         // Draw the SVG path as a black line
         currentPage.moveDown(25)
-        currentPage.drawSvgPath(svgPath, {color: rgb(1, 0, 0), borderWidth: 1, borderColor: rgb(1, 0, 0)})
+        currentPage.drawSvgPath(svgPath, {color: rgb(1, 0, 0), borderWidth: 5*0.667, borderColor: rgb(1, 0, 0)})
 
-        //let i = 0;
-        //for(i = 0; i < rectArray.length; i++) {
-       // if(rectArray.length === 0) {
-            //return;
-       // }
        currentPage.drawRectangle({
             x: rectArray[0].x*0.667,
             y: height - rectArray[0].h*0.667 - rectArray[0].y*0.667,
@@ -121,11 +101,6 @@ export class PDFDownload extends Component {
             //font: helveticaFont,
             color: rgb(0, 0, 0)
         })
-
-        //secondPage.moveTo(100, page.getHeight() - 5)
-
-        // secondPage.moveDown(25)
-        // secondPage.drawSvgPath(svgPath3, {color: rgb(1, 0, 0), borderWidth: 5, borderColor: rgb(1, 0, 0)})
       
         const pdfBytes = await pdfDoc.save()
         const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });

@@ -147,7 +147,6 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
       {isSelected && (
         <Transformer
           ref={trRef}
-          onClick={() => {alert('test')}}
           boundBoxFunc={(oldBox, newBox) => {
             // limit resize
             if (newBox.width < 5 || newBox.height < 5) {

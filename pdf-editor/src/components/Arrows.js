@@ -27,8 +27,8 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
     const circle1Ref = React.useRef();
     const circle2Ref = React.useRef();
 
-    const [ax1, setAx1] = React.useState(150);
-    const [ay1, setAy1] = React.useState(150);
+    const [ax1, setAx1] = React.useState(0);
+    const [ay1, setAy1] = React.useState(0);
 
     const [ax2, setAx2] = React.useState(100);
     const [ay2, setAy2] = React.useState(100);
@@ -60,11 +60,6 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
     const [deleted, setDeleted] = React.useState(false);
 
     React.useEffect(() => {
-
-        //setAx1(arrowRef.current.attrs.x);
-        //setAy1(arrowRef.current.attrs.y);
-        //setAx2(arrowRef.current.attrs.x + arrowRef.current.attrs.points[2]);
-        //setAy2(arrowRef.current.attrs.y + arrowRef.current.attrs.points[3]);
 
         let pageNumSpan = document.getElementById('page-num');
 
