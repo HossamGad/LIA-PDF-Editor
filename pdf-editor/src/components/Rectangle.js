@@ -5,19 +5,27 @@ export const rectArray = [];
 
 const importRects = (p, id, x, y, w, h) => {
 
+  console.log(id);
+
   if(p === undefined) {
     return;
   }
 
+  if(Number(id.charAt(4)) > rectArray.length) {
+    rectArray.push({pg: p, id: id, x: x, y: y, w: w, h: h});
+  }
+
   for(let i = 0; i < rectArray.length; i++){ 
     
-    if ( rectArray[i].id === 'rect'+JSON.stringify(i+1)) { 
+    if (rectArray[i].id === id) { 
 
-        rectArray.splice(i, 1);
+      rectArray[i].x = x;
+      rectArray[i].y = y;
+      rectArray[i].w = w;
+      rectArray[i].h = h;
     }
+
   }
-  
-  rectArray.push({pg: p, id: id, x: x, y: y, w: w, h: h});
   console.log(rectArray);
 };
 
@@ -60,8 +68,6 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
       w: w1,
       h: h1
     }];
-
-    console.log(h1);
 
     importRects(pageNumSpan.innerText, shapeProps.id, rx1, ry1, w1, h1);
 

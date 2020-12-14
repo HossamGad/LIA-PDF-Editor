@@ -5,19 +5,26 @@ export const textArray = [];
 
 const importTexts = (p, id, x, y, txt) => {
 
+  console.log(id);
+
   if(p === undefined) {
     return;
   }
 
+  if(Number(id.charAt(4)) > textArray.length) {
+    textArray.push({pg: p, id: id, x: x, y: y, text: txt});
+  }
+
   for(let i = 0; i < textArray.length; i++){ 
     
-    if ( textArray[i].id === 'text'+JSON.stringify(i+1)) { 
+    if ( textArray[i].id === id) { 
 
-      textArray.splice(i, 1);
+      textArray[i].x = x;
+      textArray[i].y = y;
+      textArray[i].text = txt;
+
     }
   }
-  
-  textArray.push({pg: p, id: id, x: x, y: y, text: txt});
   console.log(textArray);
 };
 

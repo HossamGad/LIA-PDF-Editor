@@ -29,7 +29,7 @@ export class PDFDownload extends Component {
         // Get the first page of the document
         const pages = pdfDoc.getPages()
 
-        const pageIndex = parseInt(rectArray[0].pg) - 1;
+        const pageIndex = parseInt(arrowsArray[0].pg) - 1;
         console.log("I am drawing on this page", pageIndex + 1);
         const currentPage = pages[pageIndex];
        
@@ -85,22 +85,26 @@ export class PDFDownload extends Component {
         currentPage.moveDown(25)
         currentPage.drawSvgPath(svgPath, {color: rgb(1, 0, 0), borderWidth: 5*0.667, borderColor: rgb(1, 0, 0)})
 
-       currentPage.drawRectangle({
-            x: rectArray[0].x*0.667,
-            y: height - rectArray[0].h*0.667 - rectArray[0].y*0.667,
-            width: rectArray[0].w*0.667,
-            height: rectArray[0].h*0.667,
-            color: rgb(1, 1, 0),
-            opacity: 0.5 
+        for(let i = 0; i < rectArray.length; i++) {
+            currentPage.drawRectangle({
+                x: rectArray[i].x*0.667,
+                y: height - rectArray[i].h*0.667 - rectArray[i].y*0.667,
+                width: rectArray[i].w*0.667,
+                height: rectArray[i].h*0.667,
+                color: rgb(1, 1, 0),
+                opacity: 0.5 
             })
+        }
         
-        currentPage.drawText(textArray[0].text,{
-            x: textArray[0].x*0.667,
-            y: height - 40*0.667 - textArray[0].y*0.667,
-            size: 40*0.667,
-            //font: helveticaFont,
-            color: rgb(0, 0, 0)
-        })
+        for(let j = 0; j < textArray.length; j++) {
+            currentPage.drawText(textArray[j].text,{
+                x: textArray[j].x*0.667,
+                y: height - 40*0.667 - textArray[j].y*0.667,
+                size: 40*0.667,
+                //font: helveticaFont,
+                color: rgb(0, 0, 0)
+            })
+        }
       
         const pdfBytes = await pdfDoc.save()
         const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
