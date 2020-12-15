@@ -3,9 +3,7 @@ import { Text, Transformer } from 'react-konva';
 
 export const textArray = [];
 
-const importTexts = (p, id, x, y, txt) => {
-
-  console.log(id);
+const addTexts = (p, id, x, y, txt) => {
 
   if(p === undefined) {
     return;
@@ -37,6 +35,8 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
   const [tx1, setTx1] = React.useState(0);
   const [ty1, setTy1] = React.useState(0);
+  const [txt, setTxt] = React.useState(shapeProps.text);
+
 
   React.useEffect(() => {
 
@@ -45,11 +45,11 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
     let pageNumSpan = document.getElementById('page-num');
 
-    let txt = shapeProps.text;
+    console.log(txt);
 
-    importTexts(pageNumSpan.innerText, shapeProps.id, tx1, ty1, txt);
+    addTexts(pageNumSpan.innerText, shapeProps.id, tx1, ty1, txt);
   
-  }, [setTx1, setTy1, tx1, ty1, shapeProps]);
+  }, [setTx1, setTy1, setTxt, tx1, ty1, txt, shapeProps]);
 
   React.useEffect(() => {
     if (isSelected) {
@@ -87,15 +87,15 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
           
           const textNode = shapeRef.current;
           const tr = trRef.current;
+
+          console.log(textNode);
           
           setVisible(false);
           setDeleted(true);
 
-          
           textNode.hide();
           tr.hide();
           
-
           let topBar = document.getElementById('test-div');
           let textArea = document.createElement('textarea');
           topBar.appendChild(textArea);
@@ -104,17 +104,22 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
           
           textArea.value = textNode.text();
           textArea.addEventListener('keydown', function(e) {
+
             if(e.keyCode === 13) {
 
               setVisible(true);
 
+              textNode.text(textArea.value);
+
               if(visible === true)
               {
-                textNode.text(textArea.value);
+                setTxt(textArea.value);
                 textArea.parentNode.removeChild(textArea);
+                console.log(txt);
 
                 textNode.show();
                 tr.show();
+                onSelect();
               } 
             }
           })

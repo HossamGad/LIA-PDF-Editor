@@ -3,9 +3,7 @@ import { Rect, Transformer } from 'react-konva';
 
 export const rectArray = [];
 
-const importRects = (p, id, x, y, w, h) => {
-
-  console.log(id);
+const addRects = (p, id, x, y, w, h) => {
 
   if(p === undefined) {
     return;
@@ -23,6 +21,7 @@ const importRects = (p, id, x, y, w, h) => {
       rectArray[i].y = y;
       rectArray[i].w = w;
       rectArray[i].h = h;
+      
     }
 
   }
@@ -33,10 +32,6 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
   const shapeRef = React.useRef();
   const trRef = React.useRef();
   
-  //const [rectangel, setRectangel] = React.useState(localStorage.getItem('rect1'));
-  //const [pgData, setpgData] = React.useState(0);
-  //const [pageNum, setPageNum] = React.useState(0);
-
   const [deleted, setDeleted] = React.useState(false);
   
   const [rx1, setRx1] = React.useState(0);
@@ -44,12 +39,6 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
 
   const [w1, setW1] = React.useState(200);
   const [h1, setH1] = React.useState(30);
-
-  //const [rx12, setRx12] = React.useState(300);
-  //const [ry12, setRy12] = React.useState(300);
-
-  //const [w12, setW12] = React.useState(200);
-  //const [h12, setH12] = React.useState(30);
 
   React.useEffect(() => {
 
@@ -69,29 +58,13 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
       h: h1
     }];
 
-    importRects(pageNumSpan.innerText, shapeProps.id, rx1, ry1, w1, h1);
+    addRects(pageNumSpan.innerText, shapeProps.id, rx1, ry1, w1, h1);
 
     const json = JSON.stringify(localStorageRectangle);
     localStorage.setItem(shapeProps.id, json);
 
   }, [setRx1, setRy1, setW1, setH1, rx1, ry1, w1, h1, shapeProps]);
 
-  /*
-  React.useEffect(() => {
-
-    
-    for (var i = 0; i < localStorage.length; i++){
-      let item = localStorage.getItem(localStorage.key(i));
-      let parsedItem = JSON.parse(item);
-      
-        setRx12(parsedItem[i].x);
-        setRy12(parsedItem[i].y);
-        setW12(parsedItem[i].w);
-        setH12(parsedItem[i].h);
-    }
-  }, [setRx1, setRy1, setW1, setH1]);
-  */
-  
   React.useEffect(() => {
 
     if (isSelected) {

@@ -7,7 +7,6 @@ import { Rectangle } from './components/Rectangle';
 import { TextEdit } from './components/TextEdit';
 import { Arrows } from './components/Arrows';
 //import LocalStorage from './components/LocalStorage';
-//import { TestLocalStorage } from './components/TestLocalStorage';
 
 let idnum = 0;
 let idnum3 = 0;
@@ -101,6 +100,8 @@ class App extends Component {
     this.setState({
       texts: texts
     });
+
+    textarea.value = "";
   }
 
   callbackPage = (pageData) => {
@@ -124,7 +125,6 @@ class App extends Component {
 
   render() {
 
-    // console.log(this.state.items);
     return (
       <>
       <canvas ref={this.canvasRef} id="pdf-render"></canvas>
@@ -215,7 +215,6 @@ class App extends Component {
             );
           })}
           
-          {/*<TestLocalStorage />*/}
           </Layer>
         </Stage>
         </div>    

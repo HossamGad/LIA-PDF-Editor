@@ -29,18 +29,30 @@ export class PDFDownload extends Component {
         // Get the first page of the document
         const pages = pdfDoc.getPages()
 
-        const pageIndex = parseInt(arrowsArray[0].pg) - 1;
-        console.log("I am drawing on this page", pageIndex + 1);
+        let pageIndex;
+
+        if (arrowsArray.length >= 1) {
+            pageIndex = parseInt(arrowsArray[0].pg) - 1;
+        } else if(textArray.length >= 1) {
+            pageIndex = parseInt(textArray[0].pg) - 1;
+        } else if (rectArray.length >= 1) {
+            pageIndex = parseInt(rectArray[0].pg) - 1;
+        } else {
+            pageIndex = 0;
+        }
+        
         const currentPage = pages[pageIndex];
        
         // Get the width and height of the first page
         const { width, height } = currentPage.getSize()
         console.log(width, height);
         
-        let arX1 = arrowsArray[0].x1*0.667;
-        let arY1 = arrowsArray[0].y1*0.667;
-        let arX2 = arrowsArray[0].x1*0.667 + arrowsArray[0].x2*0.667;
-        let arY2 = arrowsArray[0].y1*0.667 + arrowsArray[0].y2*0.667;
+        for(let k = 0; k < arrowsArray.length; k++) {
+
+        let arX1 = arrowsArray[k].x1*0.667;
+        let arY1 = arrowsArray[k].y1*0.667;
+        let arX2 = arrowsArray[k].x1*0.667 + arrowsArray[k].x2*0.667;
+        let arY2 = arrowsArray[k].y1*0.667 + arrowsArray[k].y2*0.667;
 
         console.log(arX1, arX2);
 
@@ -84,6 +96,7 @@ export class PDFDownload extends Component {
         // Draw the SVG path as a black line
         currentPage.moveDown(25)
         currentPage.drawSvgPath(svgPath, {color: rgb(1, 0, 0), borderWidth: 5*0.667, borderColor: rgb(1, 0, 0)})
+        }
 
         for(let i = 0; i < rectArray.length; i++) {
             currentPage.drawRectangle({
