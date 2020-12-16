@@ -94,6 +94,12 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
                         circle1Node.destroy();
                         circle2Node.destroy();
                         arrowNode.destroy();
+
+                        for(let a = 0; a < arrowsArray.length; a++) {
+                            if(arrowsArray[a].id === arrowNode.attrs.id)
+                            arrowsArray.splice(a, 1);
+                          }
+
                     }   
                   }
               }

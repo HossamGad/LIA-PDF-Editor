@@ -28,7 +28,7 @@ const addRects = (p, id, x, y, w, h) => {
   console.log(rectArray);
 };
 
-export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParentStageElem, getParentLayerElem }) => {
+export const RectangleTest = ({ shapeProps, isSelected, onSelect, onChange, getParentStageElem, getParentLayerElem }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
   
@@ -107,7 +107,7 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
         y= {ry1}
         width= {w1}
         height= {h1}
-        fill= 'yellow'
+        fill= 'red'
         opacity = {0.5}
         onClick={onSelect}
         onTap={onSelect}
@@ -158,4 +158,3 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
     </React.Fragment>
   );
 };
-

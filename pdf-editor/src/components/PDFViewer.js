@@ -71,6 +71,7 @@ export class PDFViewer extends Component {
         });
 
         this.props.cPage(num);
+        this.props.renderCurrentSymbols(num);
     }
 
     queueRenderPage = num => {

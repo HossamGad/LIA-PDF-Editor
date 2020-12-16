@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import {Stage, Layer} from 'react-konva';
+import { Stage, Layer } from 'react-konva';
 import './App.css';
 import { PDFViewer } from './components/PDFViewer';
 import { PDFDownload } from './components/PDFDownload';
 import { Rectangle } from './components/Rectangle';
+import { RectangleTest } from './components/RectangleTest';
 import { TextEdit } from './components/TextEdit';
 import { Arrows } from './components/Arrows';
+//import {rectArray} from './components/Rectangle';
 //import LocalStorage from './components/LocalStorage';
 
 let idnum = 0;
@@ -23,6 +25,8 @@ const initialArrows2 = [
 const initialTexts = [
   
 ];
+
+let newRectArray = [];
 
 class App extends Component {
   constructor(props) {
@@ -110,7 +114,36 @@ class App extends Component {
       pageDataFromChild: data
     });
   }
+  
+  callbackCurrentSymbols = (pageNumber) => {
+    let pageNum = pageNumber;
 
+    let localStorageArr = [];
+
+    for (var i = 0; i < localStorage.length; i++){
+      let item = localStorage.getItem(localStorage.key(i));
+      let parsedItem = JSON.parse(item);
+      console.log(parsedItem);
+      localStorageArr.push(parsedItem[0]);
+    }
+
+    console.log(localStorageArr);
+    
+    for(let s = 0; s < localStorageArr.length; s++) {
+      if(Number(localStorageArr[s].page) === pageNum) {
+
+          newRectArray.push(localStorageArr[s]);
+          console.log(newRectArray);
+
+      } else if (Number(localStorageArr[s].page) !== pageNum) {
+
+          newRectArray.splice(s, 1);
+          console.log(newRectArray);
+
+      }
+    }
+  }
+  
   checkDeselect(e) {
     // deselect when clicked on empty area
     const clickedOnEmpty = e.target === e.target.getStage();
@@ -122,7 +155,7 @@ class App extends Component {
         });
     }
   };
-
+  
   render() {
 
     return (
@@ -133,7 +166,7 @@ class App extends Component {
       </div>
       <div id="id-app" className="App" style={{position: 'absolute', overflow: 'hidden', top :82, left: 0, zIndex: 2}}>
         <div id="tbar" className="top-bar" style={{zIndex: 3}}>
-            <PDFViewer cPage={this.callbackPage} />
+            <PDFViewer cPage={this.callbackPage} renderCurrentSymbols={this.callbackCurrentSymbols} />
             <PDFDownload />
             <button id="idrect" className="btn" style={{float:"right", marginRight:40}} onClick={() => this.addRectangle()}><i className="far fa-square"></i></button>
             <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addArrow2()}><i className="fas fa-location-arrow"></i></button>
@@ -211,6 +244,29 @@ class App extends Component {
                     arrows2: arrows2
                   })                   
                 }}
+              />
+            );
+          })}
+          
+          {newRectArray.map((newRect, i) => {
+            return (
+              <RectangleTest
+                key={i}
+                shapeProps={newRect}
+                isSelected={newRect.id === this.state.selectedId}
+                onSelect={() => {
+                  this.setState({
+                    selectedId: newRect.id
+                  })
+                }}
+                onChange={(newAttrs) => {
+                  const rects = newRectArray.slice();
+                  rects[i] = newAttrs;
+                  this.setState({
+                    rectangles: rects
+                  })
+                }}
+                pgData={this.state.pageDataFromChild}
               />
             );
           })}
