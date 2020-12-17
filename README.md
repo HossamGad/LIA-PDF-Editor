@@ -1,6 +1,5 @@
 # LIA-PDF-Editor
 
-- [ ] Länk till verktyg
 - [x] Städa filer 
 - [ ] Rätta till buggar
 - [x] Rätta till så att man även kan ladda ner alla symboler var för sig 
@@ -10,5 +9,5 @@
 - [x] Fixa till så att text inte försvinner om man klickar utanför input 
 - [x] Rätt text vid updatering när skriver ut pdf 
 - [ ] Sidnummer för symboler ändras när byter sida
-- [ ] När man laddar ner en annan pdf anpassas Konva automatiskt
+- [x] När man laddar ner en annan pdf anpassas Konva automatiskt
 - [x] När raderar en symbol eller text så bör den tas bort från array/download 

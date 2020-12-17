@@ -24,9 +24,8 @@ export class PDFViewer extends Component {
     }
 
     handleClick() {
-
         PdfJsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
-        PdfJsLib.getDocument('./myPDF.pdf').promise.then(pdfDoc_ => {
+        PdfJsLib.getDocument('myPDF.pdf').promise.then(pdfDoc_ => {
 
             pdfDoc = pdfDoc_;
             this.setState({
@@ -50,6 +49,8 @@ export class PDFViewer extends Component {
             const viewport = page.getViewport({ scale });
             canvas.height = viewport.height;
             canvas.width = viewport.width;
+
+            this.props.renderDimensions(canvas.width, canvas.height);
 
             const renderCtx = {
                 canvasContext: ctx,
@@ -108,7 +109,7 @@ export class PDFViewer extends Component {
                 </button>
                 <button className="btn" id="next-page" style={{float:"left"}} onClick={this.showNextPage}>
                     Next Page <i className="fas fa-arrow-circle-right"></i>
-                </button>
+                </button>             
                 <button className="btn" id="load-pdf" onClick={this.handleClick}>Upload PDF</button>
                 <span className="page-info" style={{float:"left"}}>
                     Page <span id="page-num">{ this.state.actualPage }</span> of <span id="page-count">{ this.state.pages }</span>

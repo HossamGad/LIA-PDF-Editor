@@ -8,7 +8,6 @@ import { RectangleTest } from './components/RectangleTest';
 import { TextEdit } from './components/TextEdit';
 import { Arrows } from './components/Arrows';
 //import {rectArray} from './components/Rectangle';
-//import LocalStorage from './components/LocalStorage';
 
 let idnum = 0;
 let idnum3 = 0;
@@ -45,11 +44,25 @@ class App extends Component {
       pageDataFromChild: 0,
       // items: props.items
 
+      wd: 0,
+      ht: 0
+
     }
     this.canvasRef = React.createRef();
     this.checkDeselect = this.checkDeselect.bind(this);
+    this.renderCanvasDimensions = this.renderCanvasDimensions.bind(this);
   }
 
+  renderCanvasDimensions(width, height) {
+    let w = width;
+    let h = height;
+
+    this.setState({
+      wd: w,
+      ht: h
+    });
+  }
+  
   addRectangle() {
 
     idnum++;
@@ -130,17 +143,27 @@ class App extends Component {
     console.log(localStorageArr);
     
     for(let s = 0; s < localStorageArr.length; s++) {
+
+      console.log(localStorageArr[s].page);
+      console.log(newRectArray);
+
       if(Number(localStorageArr[s].page) === pageNum) {
 
           newRectArray.push(localStorageArr[s]);
+          
           console.log(newRectArray);
 
-      } else if (Number(localStorageArr[s].page) !== pageNum) {
+      }
+      /*
+      We got an empty objekt from this. So this may be needed.
+
+      else if (Number(localStorageArr[s].page) !== pageNum) {
 
           newRectArray.splice(s, 1);
           console.log(newRectArray);
 
       }
+      */
     }
   }
   
@@ -166,16 +189,15 @@ class App extends Component {
       </div>
       <div id="id-app" className="App" style={{position: 'absolute', overflow: 'hidden', top :82, left: 0, zIndex: 2}}>
         <div id="tbar" className="top-bar" style={{zIndex: 3}}>
-            <PDFViewer cPage={this.callbackPage} renderCurrentSymbols={this.callbackCurrentSymbols} />
+            <PDFViewer cPage={this.callbackPage} renderCurrentSymbols={this.callbackCurrentSymbols} renderDimensions={this.renderCanvasDimensions} />
             <PDFDownload />
             <button id="idrect" className="btn" style={{float:"right", marginRight:40}} onClick={() => this.addRectangle()}><i className="far fa-square"></i></button>
             <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addArrow2()}><i className="fas fa-location-arrow"></i></button>
             <button className="btn" style={{float:"right", marginRight:5}} onClick={() => this.addText()}><i className="fas fas fa-font"></i></button>
             <input id="text-area" placeholder=" Write text here..."style={{float:"right", marginRight:5, margin:5, height: 35, fontSize: 20}} />
-            {/*<LocalStorage pgData={this.state.pageDataFromChild} />*/}
         </div>
 
-        <Stage ref={this.stageElem} id="id-stage" width={918} height={1188}
+        <Stage ref={this.stageElem} id="id-stage" width={this.state.wd} height={this.state.ht}
           onMouseDown={this.checkDeselect}
           onTouchStart={this.checkDeselect}
         >
