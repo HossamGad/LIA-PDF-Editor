@@ -23,7 +23,7 @@ const addTexts = (p, id, x, y, txt) => {
 
     }
   }
-  console.log(textArray);
+
 };
 
 export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
@@ -44,8 +44,6 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
     setTy1(shapeRef.current.attrs.y);
 
     let pageNumSpan = document.getElementById('page-num');
-
-    console.log(txt);
 
     addTexts(pageNumSpan.innerText, shapeProps.id, tx1, ty1, txt);
   

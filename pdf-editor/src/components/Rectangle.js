@@ -25,7 +25,6 @@ const addRects = (p, id, x, y, w, h) => {
     }
 
   }
-  console.log(rectArray);
 };
 
 export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParentStageElem, getParentLayerElem }) => {
