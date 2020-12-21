@@ -26,7 +26,7 @@ const addTexts = (p, id, x, y, txt) => {
 
 };
 
-export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
+export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange, cText }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
 
@@ -49,7 +49,7 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
   
   }, [setTx1, setTy1, setTxt, tx1, ty1, txt, shapeProps]);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (isSelected) {
       // we need to attach transformer manually
       trRef.current.nodes([shapeRef.current]);
@@ -91,8 +91,6 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
           
           const textNode = shapeRef.current;
           const tr = trRef.current;
-
-          console.log(textNode);
           
           setVisible(false);
           setDeleted(true);
@@ -119,7 +117,8 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
               {
                 setTxt(textArea.value);
                 textArea.parentNode.removeChild(textArea);
-                console.log(txt);
+
+                cText(textNode.attrs.id, textArea.value);
 
                 textNode.show();
                 tr.show();

@@ -48,6 +48,7 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
 
     let pageNumSpan = document.getElementById('page-num');
 
+    /*
     let localStorageRectangle = [{
       page: pageNumSpan.innerText,
       id: shapeProps.id,
@@ -56,15 +57,18 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
       w: w1,
       h: h1
     }];
+    */
 
     addRects(pageNumSpan.innerText, shapeProps.id, rx1, ry1, w1, h1);
 
+    /*
     const json = JSON.stringify(localStorageRectangle);
     localStorage.setItem(shapeProps.id, json);
+    */
 
   }, [setRx1, setRy1, setW1, setH1, rx1, ry1, w1, h1, shapeProps]);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
 
     if (isSelected) {
       

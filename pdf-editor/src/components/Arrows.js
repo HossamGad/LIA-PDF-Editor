@@ -114,6 +114,7 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
                 {...shapeProps}
                 x= {ax1}
                 y= {ay1}
+                onChange={{}}
                 points = {[0, 0, ax2, ay2]}
                 pointerLength = {20} 
                 pointerWidth= {20}
@@ -121,13 +122,14 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
                 stroke= 'Red'
                 strokeWidth= {5}
                 draggable
-                onDragMove={() => {
+                onDragMove={(e) => {
                     
                     setX1(arrowRef.current.attrs.x);
                     setY1(arrowRef.current.attrs.y);
 
                     setAx1(arrowRef.current.attrs.x);
                     setAy1(arrowRef.current.attrs.y);
+
                 }}
                 onDragEnd={(e) => {
                     onChange({
@@ -167,7 +169,7 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
                 draggable
                 onDragMove={() => {
                     setAx2(circle2Ref.current.attrs.x - circle1Ref.current.attrs.x);
-                    setAy2(circle2Ref.current.attrs.y - circle1Ref.current.attrs.y);
+                    setAy2(circle2Ref.current.attrs.y - circle1Ref.current.attrs.y);    
                 }}
             />}
         </React.Fragment>

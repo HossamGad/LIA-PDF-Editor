@@ -34,6 +34,7 @@ class App extends Component {
       selectedId4: null,
 
       pageDataFromChild: 0,
+      textDataFromChild: null,
       // items: props.items
 
       wd: 0,
@@ -62,6 +63,8 @@ class App extends Component {
       page: this.state.pageDataFromChild,
       x: 110,
       y: 210,
+      width: 200,
+      height: 30
     });
     this.setState({
       rectangles: rectangles,
@@ -76,6 +79,7 @@ class App extends Component {
       page: this.state.pageDataFromChild,
       x: 110,
       y: 210,
+      points: [0, 0, 100, 100]
     });
     this.setState({
       arrows2: arrows2,
@@ -118,6 +122,23 @@ class App extends Component {
     });
   };
 
+  callbackText = (id, textData) => {
+    let textId = id;
+    let data = textData;
+    let newText = this.state.texts;
+
+    for(let l = 0; l < newText.length; l++) {
+      if(newText[l].id === textId) {
+        newText[l].text = data;
+
+        this.setState({
+          texts: newText,
+        });
+
+      }
+    }
+  };
+
   checkDeselect(e) {
     // deselect when clicked on empty area
     const clickedOnEmpty = e.target === e.target.getStage();
@@ -154,7 +175,11 @@ class App extends Component {
               cPage={this.callbackPage}
               renderDimensions={this.renderCanvasDimensions}
             />
-            <PDFDownload />
+            <PDFDownload 
+              rectProps={this.state.rectangles} 
+              textProps={this.state.texts} 
+              arrowProps={this.state.arrows2}
+            />
             <button
               id="idrect"
               className="btn"
@@ -221,7 +246,6 @@ class App extends Component {
                         this.setState({
                           rectangles: rects,
                         });
-                        console.log(newAttrs);
                       }}
                       pgData={this.state.pageDataFromChild}
                     />
@@ -243,15 +267,17 @@ class App extends Component {
                       }}
                       onChange={(newAttrs) => {
                         const texts = this.state.texts.slice();
+                        
                         const index = texts.findIndex(
                           (ct) => ct.id === text.id
                         );
                         texts[index] = newAttrs;
+
                         this.setState({
                           texts: texts,
                         });
-                        console.log(newAttrs);
                       }}
+                      cText={this.callbackText}
                     />
                   );
                 })}
