@@ -3,22 +3,27 @@ import { Text, Transformer } from 'react-konva';
 
 export const textArray = [];
 
-const importTexts = (p, id, x, y, txt) => {
+const addTexts = (p, id, x, y, txt) => {
 
   if(p === undefined) {
     return;
   }
 
+  if(Number(id.charAt(4)) > textArray.length) {
+    textArray.push({pg: p, id: id, x: x, y: y, text: txt});
+  }
+
   for(let i = 0; i < textArray.length; i++){ 
     
-    if ( textArray[i].id === 'text'+JSON.stringify(i+1)) { 
+    if ( textArray[i].id === id) { 
 
-      textArray.splice(i, 1);
+      textArray[i].x = x;
+      textArray[i].y = y;
+      textArray[i].text = txt;
+
     }
   }
-  
-  textArray.push({pg: p, id: id, x: x, y: y, text: txt});
-  console.log(textArray);
+
 };
 
 export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
@@ -30,6 +35,8 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
   const [tx1, setTx1] = React.useState(0);
   const [ty1, setTy1] = React.useState(0);
+  const [txt, setTxt] = React.useState(shapeProps.text);
+
 
   React.useEffect(() => {
 
@@ -38,17 +45,14 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
     let pageNumSpan = document.getElementById('page-num');
 
-    let txt = shapeProps.text;
-
-    importTexts(pageNumSpan.innerText, shapeProps.id, tx1, ty1, txt);
+    addTexts(pageNumSpan.innerText, shapeProps.id, tx1, ty1, txt);
   
-  }, [setTx1, setTy1, tx1, ty1, shapeProps]);
+  }, [setTx1, setTy1, setTxt, tx1, ty1, txt, shapeProps]);
 
   React.useEffect(() => {
     if (isSelected) {
       // we need to attach transformer manually
       trRef.current.nodes([shapeRef.current]);
-      trRef.current.getLayer().batchDraw();
 
       document.addEventListener("keydown", function(event) {
         if (event.key === 'Delete') {
@@ -62,8 +66,15 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
               if(trNode === null) {
                 return;
               } else {
-                //trRef.destroy();
+
+                trNode.destroy();
                 textNode.destroy();
+
+                for(let a = 0; a < textArray.length; a++) {
+                  if(textArray[a].id === textNode.attrs.id)
+                    textArray.splice(a, 1);
+                }
+
               } 
             }
         }
@@ -80,15 +91,15 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
           
           const textNode = shapeRef.current;
           const tr = trRef.current;
+
+          console.log(textNode);
           
           setVisible(false);
           setDeleted(true);
 
-          
           textNode.hide();
           tr.hide();
           
-
           let topBar = document.getElementById('test-div');
           let textArea = document.createElement('textarea');
           topBar.appendChild(textArea);
@@ -97,17 +108,22 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
           
           textArea.value = textNode.text();
           textArea.addEventListener('keydown', function(e) {
+
             if(e.keyCode === 13) {
 
               setVisible(true);
 
+              textNode.text(textArea.value);
+
               if(visible === true)
               {
-                textNode.text(textArea.value);
+                setTxt(textArea.value);
                 textArea.parentNode.removeChild(textArea);
+                console.log(txt);
 
                 textNode.show();
                 tr.show();
+                onSelect();
               } 
             }
           })

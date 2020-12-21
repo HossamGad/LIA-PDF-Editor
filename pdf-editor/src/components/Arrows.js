@@ -3,22 +3,28 @@ import { Arrow, Rect } from 'react-konva';
 
 export const arrowsArray = [];
 
-const importArrows = (p, id, x1, y1, x2, y2) => {
+const addArrows = (p, id, x1, y1, x2, y2) => {
 
-  if(p === undefined) {
-    return;
-  }
-
-  for(let i = 0; i < arrowsArray.length; i++){ 
-    
-    if ( arrowsArray[i].id === '2arrow'+JSON.stringify(i+1)) { 
-
-        arrowsArray.splice(i, 1);
+    if(p === undefined) {
+        return;
     }
-  }
-  
-  arrowsArray.push({pg: p, id: id, x1: x1, y1: y1, x2: x2, y2: y2});
-  console.log(arrowsArray);
+
+    if(Number(id.charAt(6)) > arrowsArray.length) {
+        arrowsArray.push({pg: p, id: id, x1: x1, y1: y1, x2: x2, y2: y2});
+    }
+
+    for(let i = 0; i < arrowsArray.length; i++){ 
+    
+        if (arrowsArray[i].id === id) { 
+    
+          arrowsArray[i].x1 = x1;
+          arrowsArray[i].y1 = y1;
+          arrowsArray[i].x2 = x2;
+          arrowsArray[i].y2 = y2;
+          
+        }
+    
+      }
 };
 
 export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
@@ -27,8 +33,8 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
     const circle1Ref = React.useRef();
     const circle2Ref = React.useRef();
 
-    const [ax1, setAx1] = React.useState(0);
-    const [ay1, setAy1] = React.useState(0);
+    const [ax1, setAx1] = React.useState(shapeProps.x);
+    const [ay1, setAy1] = React.useState(shapeProps.y);
 
     const [ax2, setAx2] = React.useState(100);
     const [ay2, setAy2] = React.useState(100);
@@ -40,7 +46,7 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
     const [y2, setY2] = React.useState(90);
 
     React.useEffect(() => {
-
+        
         setX1(arrowRef.current.attrs.x - 5);
         setY1(arrowRef.current.attrs.y - 5);
 
@@ -63,8 +69,7 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
         let pageNumSpan = document.getElementById('page-num');
 
-        console.log(ax1);
-        importArrows(pageNumSpan.innerText, shapeProps.id, ax1, ay1, ax2, ay2);
+        addArrows(pageNumSpan.innerText, shapeProps.id, ax1, ay1, ax2, ay2);
 
     }, [ax1, ay1, ax2, ay2, shapeProps])
 
@@ -86,6 +91,12 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
                         circle1Node.destroy();
                         circle2Node.destroy();
                         arrowNode.destroy();
+
+                        for(let a = 0; a < arrowsArray.length; a++) {
+                            if(arrowsArray[a].id === arrowNode.attrs.id)
+                            arrowsArray.splice(a, 1);
+                          }
+
                     }   
                   }
               }
@@ -111,11 +122,19 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
                 strokeWidth= {5}
                 draggable
                 onDragMove={() => {
+                    
                     setX1(arrowRef.current.attrs.x);
                     setY1(arrowRef.current.attrs.y);
 
                     setAx1(arrowRef.current.attrs.x);
                     setAy1(arrowRef.current.attrs.y);
+                }}
+                onDragEnd={(e) => {
+                    onChange({
+                      ...shapeProps,
+                      x: e.target.x(),
+                      y: e.target.y(),
+                    });
                 }}
             />
             {isSelected && <Rect 

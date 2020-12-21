@@ -3,32 +3,34 @@ import { Rect, Transformer } from 'react-konva';
 
 export const rectArray = [];
 
-const importRects = (p, id, x, y, w, h) => {
+const addRects = (p, id, x, y, w, h) => {
 
   if(p === undefined) {
     return;
   }
 
+  if(Number(id.charAt(4)) > rectArray.length) {
+    rectArray.push({pg: p, id: id, x: x, y: y, w: w, h: h});
+  }
+
   for(let i = 0; i < rectArray.length; i++){ 
     
-    if ( rectArray[i].id === 'rect'+JSON.stringify(i+1)) { 
+    if (rectArray[i].id === id) { 
 
-        rectArray.splice(i, 1);
+      rectArray[i].x = x;
+      rectArray[i].y = y;
+      rectArray[i].w = w;
+      rectArray[i].h = h;
+      
     }
+
   }
-  
-  rectArray.push({pg: p, id: id, x: x, y: y, w: w, h: h});
-  console.log(rectArray);
 };
 
 export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParentStageElem, getParentLayerElem }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
   
-  //const [rectangel, setRectangel] = React.useState(localStorage.getItem('rect1'));
-  //const [pgData, setpgData] = React.useState(0);
-  //const [pageNum, setPageNum] = React.useState(0);
-
   const [deleted, setDeleted] = React.useState(false);
   
   const [rx1, setRx1] = React.useState(0);
@@ -36,12 +38,6 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
 
   const [w1, setW1] = React.useState(200);
   const [h1, setH1] = React.useState(30);
-
-  //const [rx12, setRx12] = React.useState(300);
-  //const [ry12, setRy12] = React.useState(300);
-
-  //const [w12, setW12] = React.useState(200);
-  //const [h12, setH12] = React.useState(30);
 
   React.useEffect(() => {
 
@@ -61,38 +57,19 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
       h: h1
     }];
 
-    console.log(h1);
-
-    importRects(pageNumSpan.innerText, shapeProps.id, rx1, ry1, w1, h1);
+    addRects(pageNumSpan.innerText, shapeProps.id, rx1, ry1, w1, h1);
 
     const json = JSON.stringify(localStorageRectangle);
     localStorage.setItem(shapeProps.id, json);
 
   }, [setRx1, setRy1, setW1, setH1, rx1, ry1, w1, h1, shapeProps]);
 
-  /*
-  React.useEffect(() => {
-
-    
-    for (var i = 0; i < localStorage.length; i++){
-      let item = localStorage.getItem(localStorage.key(i));
-      let parsedItem = JSON.parse(item);
-      
-        setRx12(parsedItem[i].x);
-        setRy12(parsedItem[i].y);
-        setW12(parsedItem[i].w);
-        setH12(parsedItem[i].h);
-    }
-  }, [setRx1, setRy1, setW1, setH1]);
-  */
-  
   React.useEffect(() => {
 
     if (isSelected) {
       
       // we need to attach transformer manually
-        trRef.current.nodes([shapeRef.current]);
-        trRef.current.getLayer().batchDraw();
+      trRef.current.nodes([shapeRef.current]);
 
       document.addEventListener("keydown", function(event) {
         if (event.key === 'Delete') {
@@ -106,8 +83,15 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
               if(trNode === null) {
                 return;
               } else {
-                //trRef.destroy();
+
+                trNode.destroy();
                 rectNode.destroy();
+
+                for(let a = 0; a < rectArray.length; a++) {
+                  if(rectArray[a].id === rectNode.attrs.id)
+                    rectArray.splice(a, 1);
+                }
+
               }  
             }
         }
