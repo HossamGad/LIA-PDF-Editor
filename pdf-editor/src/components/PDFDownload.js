@@ -10,8 +10,6 @@ export class PDFDownload extends Component {
 
     async downloadPDF() {
 
-        console.log(this.props.textProps);
-
         const url = 'myPDF.pdf'
         const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
 

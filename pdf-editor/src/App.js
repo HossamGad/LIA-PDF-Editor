@@ -6,7 +6,7 @@ import { PDFDownload } from "./components/PDFDownload";
 import { Rectangle } from "./components/Rectangle";
 import { TextEdit } from "./components/TextEdit";
 import { Arrows } from "./components/Arrows";
-//import {rectArray} from './components/Rectangle';
+//import { arrowsArray } from './components/Arrows';
 
 let idnum = 0;
 let idnum3 = 0;
@@ -17,8 +17,6 @@ const initialRectangles = [];
 const initialArrows2 = [];
 
 const initialTexts = [];
-
-//let newRectArray = [];
 
 class App extends Component {
   constructor(props) {
@@ -139,6 +137,32 @@ class App extends Component {
     }
   };
 
+  callbackArrows = (page, id, x1, y1, x2, y2) => {
+
+    let arrowPage = page;
+    let arrowId = id;
+    let arrowX1 = x1;
+    let arrowY1 = y1;
+    let arrowX2 = x2;
+    let arrowY2 = y2;
+    let newArrow = this.state.arrows2;
+    
+    for(let a = 0; a < newArrow.length; a++) {
+      if(newArrow[a].id === arrowId) {
+        //newArrow[a].page = Number(arrowPage);
+        newArrow[a].x = arrowX1;
+        newArrow[a].y = arrowY1;
+        newArrow[a].points[2] = arrowX2;
+        newArrow[a].points[3] = arrowY2;
+
+        this.setState({
+          arrows2: newArrow,
+        });
+
+      }
+    }
+  };
+
   checkDeselect(e) {
     // deselect when clicked on empty area
     const clickedOnEmpty = e.target === e.target.getStage();
@@ -247,7 +271,6 @@ class App extends Component {
                           rectangles: rects,
                         });
                       }}
-                      pgData={this.state.pageDataFromChild}
                     />
                   );
                 })}
@@ -297,7 +320,6 @@ class App extends Component {
                     }}
                     onChange={(newAttrs) => {
                       const arrows = this.state.arrows2.slice();
-                      console.log(arrows);
                       const index = arrows.findIndex(
                         (ca) => ca.id === arrow.id
                       );
@@ -305,8 +327,8 @@ class App extends Component {
                       this.setState({
                         arrows2: arrows,
                       });
-                      console.log(newAttrs);
                     }}
+                    cArrows={this.callbackArrows}
                   />
                 );
               })}

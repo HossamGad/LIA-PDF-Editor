@@ -27,7 +27,7 @@ const addArrows = (p, id, x1, y1, x2, y2) => {
       }
 };
 
-export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
+export const Arrows = ({ shapeProps, isSelected, onSelect, onChange, cArrows }) => {
 
     const arrowRef = React.useRef();
     const circle1Ref = React.useRef();
@@ -36,8 +36,8 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
     const [ax1, setAx1] = React.useState(shapeProps.x);
     const [ay1, setAy1] = React.useState(shapeProps.y);
 
-    const [ax2, setAx2] = React.useState(100);
-    const [ay2, setAy2] = React.useState(100);
+    const [ax2, setAx2] = React.useState(shapeProps.points[2]);
+    const [ay2, setAy2] = React.useState(shapeProps.points[3]);
 
     const [x1, setX1] = React.useState(90);
     const [y1, setY1] = React.useState(90);
@@ -71,7 +71,9 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
         addArrows(pageNumSpan.innerText, shapeProps.id, ax1, ay1, ax2, ay2);
 
-    }, [ax1, ay1, ax2, ay2, shapeProps])
+        cArrows(pageNumSpan.innerText, shapeProps.id, ax1, ay1, ax2, ay2);
+
+    }, [ax1, ay1, ax2, ay2, shapeProps, cArrows])
 
     React.useEffect(() => {
         if (isSelected) {
@@ -92,10 +94,12 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange }) => {
                         circle2Node.destroy();
                         arrowNode.destroy();
 
+                        
                         for(let a = 0; a < arrowsArray.length; a++) {
                             if(arrowsArray[a].id === arrowNode.attrs.id)
                             arrowsArray.splice(a, 1);
-                          }
+                        }
+                        
 
                     }   
                   }
