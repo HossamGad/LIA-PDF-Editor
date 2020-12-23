@@ -4,13 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-let items = localStorage.getItem("rect1");
-
-items = items ?? [];
-
 ReactDOM.render(
   <React.StrictMode>
-    <App items={items} />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

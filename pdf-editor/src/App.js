@@ -6,40 +6,36 @@ import { PDFDownload } from "./components/PDFDownload";
 import { Rectangle } from "./components/Rectangle";
 import { TextEdit } from "./components/TextEdit";
 import { Arrows } from "./components/Arrows";
-//import {rectArray} from './components/Rectangle';
 
-let idnum = 0;
-let idnum3 = 0;
-let idnum4 = 0;
+let idnumRect = 0;
+let idnumText = 0;
+let idnumArrow = 0;
 
 const initialRectangles = [];
 
-const initialArrows2 = [];
+const initialArrows = [];
 
 const initialTexts = [];
-
-//let newRectArray = [];
 
 class App extends Component {
   constructor(props) {
     super();
     this.state = {
-      rectangles: initialRectangles, //props.items
-      selectedId: null,
+      rectangles: initialRectangles, 
+      selectedIdRect: null,
 
       texts: initialTexts,
-      selectedId3: null,
+      selectedIdText: null,
 
-      arrows2: initialArrows2,
-      selectedId4: null,
+      arrows: initialArrows,
+      selectedIdArrow: null,
 
       pageDataFromChild: 0,
-      // items: props.items
+      textDataFromChild: null,
 
       wd: 0,
       ht: 0,
     };
-    this.canvasRef = React.createRef();
     this.checkDeselect = this.checkDeselect.bind(this);
     this.renderCanvasDimensions = this.renderCanvasDimensions.bind(this);
   }
@@ -55,35 +51,38 @@ class App extends Component {
   }
 
   addRectangle() {
-    idnum++;
+    idnumRect++;
     let rectangles = this.state.rectangles;
     rectangles.push({
-      id: "rect" + idnum,
+      id: "rect" + idnumRect,
       page: this.state.pageDataFromChild,
       x: 110,
       y: 210,
+      width: 200,
+      height: 30
     });
     this.setState({
       rectangles: rectangles,
     });
   }
 
-  addArrow2() {
-    idnum4++;
-    let arrows2 = this.state.arrows2;
+  addArrow() {
+    idnumArrow++;
+    let arrows2 = this.state.arrows;
     arrows2.push({
-      id: "2arrow" + idnum4,
+      id: "2arrow" + idnumArrow,
       page: this.state.pageDataFromChild,
       x: 110,
       y: 210,
+      points: [0, 0, 100, 100]
     });
     this.setState({
-      arrows2: arrows2,
+      arrows: arrows2,
     });
   }
 
   addText() {
-    idnum3++;
+    idnumText++;
 
     let textarea = document.getElementById("text-area");
 
@@ -101,7 +100,7 @@ class App extends Component {
       text: txt3,
       fontSize: 50,
       fontFamily: "Calibri",
-      id: "text" + idnum3,
+      id: "text" + idnumText,
       page: this.state.pageDataFromChild,
     });
     this.setState({
@@ -118,14 +117,105 @@ class App extends Component {
     });
   };
 
+  callbackText = (id, textData) => {
+    let textId = id;
+    let data = textData;
+    let newText = this.state.texts;
+
+    for(let l = 0; l < newText.length; l++) {
+      if(newText[l].id === textId) {
+        newText[l].text = data;
+
+        this.setState({
+          texts: newText,
+        });
+
+      }
+    }
+  };
+
+  callbackArrows = (id, x1, y1, x2, y2) => {
+
+    let arrowId = id;
+    let arrowX1 = x1;
+    let arrowY1 = y1;
+    let arrowX2 = x2;
+    let arrowY2 = y2;
+    let newArrow = this.state.arrows;
+    
+    for(let a = 0; a < newArrow.length; a++) {
+      if(newArrow[a].id === arrowId) {
+        newArrow[a].x = arrowX1;
+        newArrow[a].y = arrowY1;
+        newArrow[a].points[2] = arrowX2;
+        newArrow[a].points[3] = arrowY2;
+
+        this.setState({
+          arrows: newArrow,
+        });
+
+      }
+    }
+  };
+
+  callbackRectangleDelete = (id) => {
+    let rectId = id;
+    let deleteRectangle = this.state.rectangles;
+    
+    for(let r = 0; r < deleteRectangle.length; r++) {
+      if(deleteRectangle[r].id === rectId) {
+
+        deleteRectangle.splice(r, 1);
+        
+        this.setState({
+          rectangles: deleteRectangle,
+        });
+
+      }
+    }
+  }
+
+  callbackTextDelete = (id) => {
+    let textId = id;
+    let deleteText = this.state.texts;
+    
+    for(let t = 0; t < deleteText.length; t++) {
+      if(deleteText[t].id === textId) {
+
+        deleteText.splice(t, 1);
+        
+        this.setState({
+          texts: deleteText,
+        });
+
+      }
+    }
+  }
+
+  callbackArrowDelete = (id) => {
+    let arrowId = id;
+    let deleteArrow = this.state.arrows;
+    
+    for(let a = 0; a < deleteArrow.length; a++) {
+      if(deleteArrow[a].id === arrowId) {
+
+        deleteArrow.splice(a, 1);
+        
+        this.setState({
+          arrows: deleteArrow,
+        });
+
+      }
+    }
+  }
+
   checkDeselect(e) {
-    // deselect when clicked on empty area
     const clickedOnEmpty = e.target === e.target.getStage();
     if (clickedOnEmpty) {
       this.setState({
-        selectedId: null,
-        selectedId3: null,
-        selectedId4: null,
+        selectedIdRect: null,
+        selectedIdText: null,
+        selectedIdArrow: null,
       });
     }
   }
@@ -133,7 +223,7 @@ class App extends Component {
   render() {
     return (
       <>
-        <canvas ref={this.canvasRef} id="pdf-render"></canvas>
+        <canvas id="pdf-render"></canvas>
         <div
           id="test-div"
           style={{ position: "absolute", top: 200, left: 200, zIndex: 4 }}
@@ -154,7 +244,11 @@ class App extends Component {
               cPage={this.callbackPage}
               renderDimensions={this.renderCanvasDimensions}
             />
-            <PDFDownload />
+            <PDFDownload 
+              rectProps={this.state.rectangles} 
+              textProps={this.state.texts} 
+              arrowProps={this.state.arrows}
+            />
             <button
               id="idrect"
               className="btn"
@@ -166,7 +260,7 @@ class App extends Component {
             <button
               className="btn"
               style={{ float: "right", marginRight: 5 }}
-              onClick={() => this.addArrow2()}
+              onClick={() => this.addArrow()}
             >
               <i className="fas fa-location-arrow"></i>
             </button>
@@ -206,10 +300,10 @@ class App extends Component {
                     <Rectangle
                       key={rect.id}
                       shapeProps={rect}
-                      isSelected={rect.id === this.state.selectedId}
+                      isSelected={rect.id === this.state.selectedIdRect}
                       onSelect={() => {
                         this.setState({
-                          selectedId: rect.id,
+                          selectedIdRect: rect.id,
                         });
                       }}
                       onChange={(newAttrs) => {
@@ -221,9 +315,8 @@ class App extends Component {
                         this.setState({
                           rectangles: rects,
                         });
-                        console.log(newAttrs);
                       }}
-                      pgData={this.state.pageDataFromChild}
+                      cRectangleDelete={this.callbackRectangleDelete}
                     />
                   );
                 })}
@@ -235,52 +328,55 @@ class App extends Component {
                     <TextEdit
                       key={text.id}
                       shapeProps={text}
-                      isSelected={text.id === this.state.selectedId3}
+                      isSelected={text.id === this.state.selectedIdText}
                       onSelect={() => {
                         this.setState({
-                          selectedId3: text.id,
+                          selectedIdText: text.id,
                         });
                       }}
                       onChange={(newAttrs) => {
                         const texts = this.state.texts.slice();
+                        
                         const index = texts.findIndex(
                           (ct) => ct.id === text.id
                         );
                         texts[index] = newAttrs;
+
                         this.setState({
                           texts: texts,
                         });
-                        console.log(newAttrs);
                       }}
+                      cText={this.callbackText}
+                      cTextDelete={this.callbackTextDelete}
                     />
                   );
                 })}
 
-              {this.state.arrows2
+              {this.state.arrows
               .filter((a) => a.page === this.state.pageDataFromChild)
               .map((arrow) => {
                 return (
                   <Arrows
                     key={arrow.id}
                     shapeProps={arrow}
-                    isSelected={arrow.id === this.state.selectedId4}
+                    isSelected={arrow.id === this.state.selectedIdArrow}
                     onSelect={() => {
                       this.setState({
-                        selectedId4: arrow.id,
+                        selectedIdArrow: arrow.id,
                       });
                     }}
                     onChange={(newAttrs) => {
-                      const arrows = this.state.arrows2.slice();
-                      console.log(arrows);
+                      const arrows = this.state.arrows.slice();
                       const index = arrows.findIndex(
                         (ca) => ca.id === arrow.id
                       );
                       arrows[index] = newAttrs;
                       this.setState({
-                        arrows2: arrows,
+                        arrows: arrows,
                       });
-                      console.log(newAttrs);
                     }}
+                    cArrows={this.callbackArrows}
+                    cArrowDelete={this.callbackArrowDelete}
                   />
                 );
               })}

@@ -1,33 +1,7 @@
 import React from 'react';
 import { Rect, Transformer } from 'react-konva';
 
-export const rectArray = [];
-
-const addRects = (p, id, x, y, w, h) => {
-
-  if(p === undefined) {
-    return;
-  }
-
-  if(Number(id.charAt(4)) > rectArray.length) {
-    rectArray.push({pg: p, id: id, x: x, y: y, w: w, h: h});
-  }
-
-  for(let i = 0; i < rectArray.length; i++){ 
-    
-    if (rectArray[i].id === id) { 
-
-      rectArray[i].x = x;
-      rectArray[i].y = y;
-      rectArray[i].w = w;
-      rectArray[i].h = h;
-      
-    }
-
-  }
-};
-
-export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParentStageElem, getParentLayerElem }) => {
+export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParentStageElem, getParentLayerElem, cRectangleDelete }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
   
@@ -46,25 +20,9 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
     setW1(shapeRef.current.attrs.width);
     setH1(shapeRef.current.attrs.height);
 
-    let pageNumSpan = document.getElementById('page-num');
-
-    let localStorageRectangle = [{
-      page: pageNumSpan.innerText,
-      id: shapeProps.id,
-      x: rx1,
-      y: ry1,
-      w: w1,
-      h: h1
-    }];
-
-    addRects(pageNumSpan.innerText, shapeProps.id, rx1, ry1, w1, h1);
-
-    const json = JSON.stringify(localStorageRectangle);
-    localStorage.setItem(shapeProps.id, json);
-
   }, [setRx1, setRy1, setW1, setH1, rx1, ry1, w1, h1, shapeProps]);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
 
     if (isSelected) {
       
@@ -84,20 +42,17 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
                 return;
               } else {
 
+                cRectangleDelete(rectNode.attrs.id);
+
                 trNode.destroy();
                 rectNode.destroy();
-
-                for(let a = 0; a < rectArray.length; a++) {
-                  if(rectArray[a].id === rectNode.attrs.id)
-                    rectArray.splice(a, 1);
-                }
 
               }  
             }
         }
       });
     }
-  }, [deleted, isSelected, getParentStageElem, getParentLayerElem]);
+  }, [deleted, isSelected, getParentStageElem, getParentLayerElem, cRectangleDelete]);
 
   return (
     <React.Fragment>
@@ -145,6 +100,7 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
       {isSelected && (
         <Transformer
           ref={trRef}
+          rotateEnabled={false}
           boundBoxFunc={(oldBox, newBox) => {
             // limit resize
             if (newBox.width < 5 || newBox.height < 5) {

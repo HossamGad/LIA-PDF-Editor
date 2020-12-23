@@ -1,32 +1,7 @@
 import React from 'react';
 import { Text, Transformer } from 'react-konva';
 
-export const textArray = [];
-
-const addTexts = (p, id, x, y, txt) => {
-
-  if(p === undefined) {
-    return;
-  }
-
-  if(Number(id.charAt(4)) > textArray.length) {
-    textArray.push({pg: p, id: id, x: x, y: y, text: txt});
-  }
-
-  for(let i = 0; i < textArray.length; i++){ 
-    
-    if ( textArray[i].id === id) { 
-
-      textArray[i].x = x;
-      textArray[i].y = y;
-      textArray[i].text = txt;
-
-    }
-  }
-
-};
-
-export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
+export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange, cText, cTextDelete }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
 
@@ -37,19 +12,14 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
   const [ty1, setTy1] = React.useState(0);
   const [txt, setTxt] = React.useState(shapeProps.text);
 
-
   React.useEffect(() => {
 
     setTx1(shapeRef.current.attrs.x);
     setTy1(shapeRef.current.attrs.y);
-
-    let pageNumSpan = document.getElementById('page-num');
-
-    addTexts(pageNumSpan.innerText, shapeProps.id, tx1, ty1, txt);
   
   }, [setTx1, setTy1, setTxt, tx1, ty1, txt, shapeProps]);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (isSelected) {
       // we need to attach transformer manually
       trRef.current.nodes([shapeRef.current]);
@@ -67,20 +37,17 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
                 return;
               } else {
 
+                cTextDelete(textNode.attrs.id);
+                
                 trNode.destroy();
                 textNode.destroy();
-
-                for(let a = 0; a < textArray.length; a++) {
-                  if(textArray[a].id === textNode.attrs.id)
-                    textArray.splice(a, 1);
-                }
 
               } 
             }
         }
       });
     }
-  }, [deleted, isSelected]);
+  }, [deleted, isSelected, cTextDelete]);
 
   return (
     <React.Fragment>
@@ -91,8 +58,6 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
           
           const textNode = shapeRef.current;
           const tr = trRef.current;
-
-          console.log(textNode);
           
           setVisible(false);
           setDeleted(true);
@@ -119,7 +84,8 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
               {
                 setTxt(textArea.value);
                 textArea.parentNode.removeChild(textArea);
-                console.log(txt);
+
+                cText(textNode.attrs.id, textArea.value);
 
                 textNode.show();
                 tr.show();
@@ -163,6 +129,7 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange }) => {
       {isSelected && (
         <Transformer
           ref={trRef}
+          rotateEnabled={false}
           boundBoxFunc={(oldBox, newBox) => {
             // limit resize
             if (newBox.width < 5 || newBox.height < 5) {
