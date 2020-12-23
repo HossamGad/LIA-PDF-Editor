@@ -1,32 +1,6 @@
 import React from 'react';
 import { Arrow, Rect } from 'react-konva';
 
-export const arrowsArray = [];
-
-const addArrows = (p, id, x1, y1, x2, y2) => {
-
-    if(p === undefined) {
-        return;
-    }
-
-    if(Number(id.charAt(6)) > arrowsArray.length) {
-        arrowsArray.push({pg: p, id: id, x1: x1, y1: y1, x2: x2, y2: y2});
-    }
-
-    for(let i = 0; i < arrowsArray.length; i++){ 
-    
-        if (arrowsArray[i].id === id) { 
-    
-          arrowsArray[i].x1 = x1;
-          arrowsArray[i].y1 = y1;
-          arrowsArray[i].x2 = x2;
-          arrowsArray[i].y2 = y2;
-          
-        }
-    
-      }
-};
-
 export const Arrows = ({ shapeProps, isSelected, onSelect, onChange, cArrows, cArrowDelete }) => {
 
     const arrowRef = React.useRef();
@@ -67,11 +41,7 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange, cArrows, cA
 
     React.useEffect(() => {
 
-        let pageNumSpan = document.getElementById('page-num');
-
-        addArrows(pageNumSpan.innerText, shapeProps.id, ax1, ay1, ax2, ay2);
-
-        cArrows(pageNumSpan.innerText, shapeProps.id, ax1, ay1, ax2, ay2);
+        cArrows(shapeProps.id, ax1, ay1, ax2, ay2);
 
     }, [ax1, ay1, ax2, ay2, shapeProps, cArrows])
 
@@ -96,12 +66,6 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange, cArrows, cA
                         circle1Node.destroy();
                         circle2Node.destroy();
                         arrowNode.destroy();
-
-                        
-                        for(let a = 0; a < arrowsArray.length; a++) {
-                            if(arrowsArray[a].id === arrowNode.attrs.id)
-                            arrowsArray.splice(a, 1);
-                        }
                         
                     }   
                   }

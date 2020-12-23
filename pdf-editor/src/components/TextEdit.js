@@ -1,31 +1,6 @@
 import React from 'react';
 import { Text, Transformer } from 'react-konva';
 
-export const textArray = [];
-
-const addTexts = (p, id, x, y, txt) => {
-
-  if(p === undefined) {
-    return;
-  }
-
-  if(Number(id.charAt(4)) > textArray.length) {
-    textArray.push({pg: p, id: id, x: x, y: y, text: txt});
-  }
-
-  for(let i = 0; i < textArray.length; i++){ 
-    
-    if ( textArray[i].id === id) { 
-
-      textArray[i].x = x;
-      textArray[i].y = y;
-      textArray[i].text = txt;
-
-    }
-  }
-
-};
-
 export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange, cText, cTextDelete }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
@@ -37,15 +12,10 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange, cText, cT
   const [ty1, setTy1] = React.useState(0);
   const [txt, setTxt] = React.useState(shapeProps.text);
 
-
   React.useEffect(() => {
 
     setTx1(shapeRef.current.attrs.x);
     setTy1(shapeRef.current.attrs.y);
-
-    let pageNumSpan = document.getElementById('page-num');
-
-    addTexts(pageNumSpan.innerText, shapeProps.id, tx1, ty1, txt);
   
   }, [setTx1, setTy1, setTxt, tx1, ty1, txt, shapeProps]);
 
@@ -71,11 +41,6 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange, cText, cT
                 
                 trNode.destroy();
                 textNode.destroy();
-
-                for(let a = 0; a < textArray.length; a++) {
-                  if(textArray[a].id === textNode.attrs.id)
-                    textArray.splice(a, 1);
-                }
 
               } 
             }
