@@ -27,7 +27,7 @@ const addArrows = (p, id, x1, y1, x2, y2) => {
       }
 };
 
-export const Arrows = ({ shapeProps, isSelected, onSelect, onChange, cArrows }) => {
+export const Arrows = ({ shapeProps, isSelected, onSelect, onChange, cArrows, cArrowDelete }) => {
 
     const arrowRef = React.useRef();
     const circle1Ref = React.useRef();
@@ -90,6 +90,9 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange, cArrows }) 
                     if(circle1Node === null) {
                         return;
                     } else {
+
+                        cArrowDelete(arrowNode.attrs.id);
+
                         circle1Node.destroy();
                         circle2Node.destroy();
                         arrowNode.destroy();
@@ -100,14 +103,13 @@ export const Arrows = ({ shapeProps, isSelected, onSelect, onChange, cArrows }) 
                             arrowsArray.splice(a, 1);
                         }
                         
-
                     }   
                   }
               }
             });
           }
 
-    }, [deleted, isSelected]);
+    }, [deleted, isSelected, cArrowDelete]);
     
     return (
         <React.Fragment>

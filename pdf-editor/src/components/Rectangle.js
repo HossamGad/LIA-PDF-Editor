@@ -27,7 +27,7 @@ const addRects = (p, id, x, y, w, h) => {
   }
 };
 
-export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParentStageElem, getParentLayerElem }) => {
+export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParentStageElem, getParentLayerElem, cRectangleDelete }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
   
@@ -88,6 +88,8 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
                 return;
               } else {
 
+                cRectangleDelete(rectNode.attrs.id);
+
                 trNode.destroy();
                 rectNode.destroy();
 
@@ -101,7 +103,7 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
         }
       });
     }
-  }, [deleted, isSelected, getParentStageElem, getParentLayerElem]);
+  }, [deleted, isSelected, getParentStageElem, getParentLayerElem, cRectangleDelete]);
 
   return (
     <React.Fragment>
@@ -149,6 +151,7 @@ export const Rectangle = ({ shapeProps, isSelected, onSelect, onChange, getParen
       {isSelected && (
         <Transformer
           ref={trRef}
+          rotateEnabled={false}
           boundBoxFunc={(oldBox, newBox) => {
             // limit resize
             if (newBox.width < 5 || newBox.height < 5) {

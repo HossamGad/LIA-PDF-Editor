@@ -139,7 +139,7 @@ class App extends Component {
 
   callbackArrows = (page, id, x1, y1, x2, y2) => {
 
-    let arrowPage = page;
+    //let arrowPage = page;
     let arrowId = id;
     let arrowX1 = x1;
     let arrowY1 = y1;
@@ -162,6 +162,57 @@ class App extends Component {
       }
     }
   };
+
+  callbackRectangleDelete = (id) => {
+    let rectId = id;
+    let deleteRectangle = this.state.rectangles;
+    
+    for(let r = 0; r < deleteRectangle.length; r++) {
+      if(deleteRectangle[r].id === rectId) {
+
+        deleteRectangle.splice(r, 1);
+        
+        this.setState({
+          rectangles: deleteRectangle,
+        });
+
+      }
+    }
+  }
+
+  callbackTextDelete = (id) => {
+    let textId = id;
+    let deleteText = this.state.texts;
+    
+    for(let t = 0; t < deleteText.length; t++) {
+      if(deleteText[t].id === textId) {
+
+        deleteText.splice(t, 1);
+        
+        this.setState({
+          texts: deleteText,
+        });
+
+      }
+    }
+  }
+
+  callbackArrowDelete = (id) => {
+    let arrowId = id;
+    let deleteArrow = this.state.arrows2;
+    
+    for(let a = 0; a < deleteArrow.length; a++) {
+      if(deleteArrow[a].id === arrowId) {
+
+        deleteArrow.splice(a, 1);
+        
+        this.setState({
+          arrows2: deleteArrow,
+        });
+
+      }
+    }
+  }
 
   checkDeselect(e) {
     // deselect when clicked on empty area
@@ -271,6 +322,7 @@ class App extends Component {
                           rectangles: rects,
                         });
                       }}
+                      cRectangleDelete={this.callbackRectangleDelete}
                     />
                   );
                 })}
@@ -301,6 +353,7 @@ class App extends Component {
                         });
                       }}
                       cText={this.callbackText}
+                      cTextDelete={this.callbackTextDelete}
                     />
                   );
                 })}
@@ -329,6 +382,7 @@ class App extends Component {
                       });
                     }}
                     cArrows={this.callbackArrows}
+                    cArrowDelete={this.callbackArrowDelete}
                   />
                 );
               })}

@@ -26,7 +26,7 @@ const addTexts = (p, id, x, y, txt) => {
 
 };
 
-export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange, cText }) => {
+export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange, cText, cTextDelete }) => {
   const shapeRef = React.useRef();
   const trRef = React.useRef();
 
@@ -67,6 +67,8 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange, cText }) 
                 return;
               } else {
 
+                cTextDelete(textNode.attrs.id);
+                
                 trNode.destroy();
                 textNode.destroy();
 
@@ -80,7 +82,7 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange, cText }) 
         }
       });
     }
-  }, [deleted, isSelected]);
+  }, [deleted, isSelected, cTextDelete]);
 
   return (
     <React.Fragment>
@@ -162,6 +164,7 @@ export const TextEdit = ({ shapeProps, isSelected, onSelect, onChange, cText }) 
       {isSelected && (
         <Transformer
           ref={trRef}
+          rotateEnabled={false}
           boundBoxFunc={(oldBox, newBox) => {
             // limit resize
             if (newBox.width < 5 || newBox.height < 5) {
