@@ -37,14 +37,18 @@ export class PDFDownload extends Component {
         const currentPage = pages[pageIndex];
        
         // Get the width and height of the first page
-        const {height } = currentPage.getSize();
+        const { height } = currentPage.getSize();
+
+        // Konva coordinates are multiplied by this factor.
+        // Converts Konva coordinates to pdf-lib coordinates.
+        const factor = 0.667;
 
         for(let k = 0; k < this.props.arrowProps.length; k++) {
 
-            let arX1 = this.props.arrowProps[k].x*0.667;
-            let arY1 = this.props.arrowProps[k].y*0.667;
-            let arX2 = this.props.arrowProps[k].x*0.667 + this.props.arrowProps[k].points[2]*0.667;
-            let arY2 = this.props.arrowProps[k].y*0.667 + this.props.arrowProps[k].points[3]*0.667;
+            let arX1 = this.props.arrowProps[k].x*factor;
+            let arY1 = this.props.arrowProps[k].y*factor;
+            let arX2 = this.props.arrowProps[k].x*factor + this.props.arrowProps[k].points[2]*factor;
+            let arY2 = this.props.arrowProps[k].y*factor + this.props.arrowProps[k].points[3]*factor;
 
             let vrad = arX2 > arX1 ? Math.atan((arY2 - arY1) / (arX2 - arX1)) : Math.atan((arY1 - arY2) / (arX1 - arX2));
             
@@ -77,15 +81,15 @@ export class PDFDownload extends Component {
 
             // Draw the SVG path as a black line
             pages[this.props.arrowProps[k].page - 1].moveDown(25)
-            pages[this.props.arrowProps[k].page - 1].drawSvgPath(svgPath, {color: rgb(1, 0, 0), borderWidth: 5*0.667, borderColor: rgb(1, 0, 0)})
+            pages[this.props.arrowProps[k].page - 1].drawSvgPath(svgPath, {color: rgb(1, 0, 0), borderWidth: 5*factor, borderColor: rgb(1, 0, 0)})
         }
 
         for(let i = 0; i < this.props.rectProps.length; i++) {
             pages[this.props.rectProps[i].page - 1].drawRectangle({
-                x: this.props.rectProps[i].x*0.667,
-                y: height - this.props.rectProps[i].height*0.667 - this.props.rectProps[i].y*0.667,
-                width: this.props.rectProps[i].width*0.667,
-                height: this.props.rectProps[i].height*0.667,
+                x: this.props.rectProps[i].x*factor,
+                y: height - this.props.rectProps[i].height*factor - this.props.rectProps[i].y*factor,
+                width: this.props.rectProps[i].width*factor,
+                height: this.props.rectProps[i].height*factor,
                 color: rgb(1, 1, 0),
                 opacity: 0.5 
             })
@@ -93,9 +97,9 @@ export class PDFDownload extends Component {
         
         for(let j = 0; j < this.props.textProps.length; j++) {
             pages[this.props.textProps[j].page - 1].drawText(this.props.textProps[j].text,{
-                x: this.props.textProps[j].x*0.667,
-                y: height - 40*0.667 - this.props.textProps[j].y*0.667,
-                size: 40*0.667,
+                x: this.props.textProps[j].x*factor,
+                y: height - 40*factor - this.props.textProps[j].y*factor,
+                size: 40*factor,
                 //font: helveticaFont,
                 color: rgb(0, 0, 0)
             })
